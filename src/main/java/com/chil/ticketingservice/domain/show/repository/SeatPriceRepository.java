@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface SeatPriceRepository extends JpaRepository<SeatPrice, Long> {
+
     boolean existsByShow_IdAndSeatType(Long showId, SeatTypeEnum seatType);
 }
