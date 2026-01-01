@@ -1,6 +1,5 @@
 package com.chil.ticketingservice.domain.user.service;
 
-import com.chil.ticketingservice.common.config.PasswordEncoder;
 import com.chil.ticketingservice.common.enums.ExceptionCode;
 import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.user.dto.request.UserCreateRequest;
@@ -9,6 +8,7 @@ import com.chil.ticketingservice.domain.user.entity.User;
 import com.chil.ticketingservice.domain.user.enums.UserRole;
 import com.chil.ticketingservice.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
