@@ -11,7 +11,7 @@ public enum ExceptionCode {
 
 
     //공연
-
+    SHOW_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 공연 ID 입니다.")
 
     //좌석 금액
 

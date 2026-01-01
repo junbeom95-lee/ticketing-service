@@ -1,5 +1,7 @@
 package com.chil.ticketingservice.domain.show.entity;
 
+import com.chil.ticketingservice.common.dto.CommonResponse;
+import com.chil.ticketingservice.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Table(name = "shows")
 @NoArgsConstructor(access =AccessLevel.PROTECTED)
-public class Show {
+public class Show extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,31 +36,26 @@ public class Show {
     private String description;
 
     @Column(nullable = false)
-    private Long creator;
+    private Long creator = 1L; // 관리자의 ROLE 을 가지고 있는 애들이 들어가야 하기 때문에 USER 병합 전 상수 처리
 
     @Column
     private String imageUrl;
-
-    @Column(nullable = false)
-    private LocalDateTime createAt;
 
     public Show(
             String title,
             String location,
             LocalDateTime showDate,
             Long ageRating,
-            String description,
-            Long creator
+            String description
     ) {
         this.title = title;
         this.location = location;
         this.showDate = showDate;
         this.ageRating = ageRating;
         this.description = description;
-        this.creator = creator;
     }
 
-    // 공연 삭제
+    // 공연 삭제 메서드
     public void showDelete(Long id) {
         this.id = id;
     }
