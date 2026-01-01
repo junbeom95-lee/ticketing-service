@@ -11,15 +11,18 @@ public enum ExceptionCode {
 
 
     //공연
+    SHOW_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 공연 ID"),
 
 
     //좌석 금액
+    INVALID_PRICE(HttpStatus.CONFLICT, "입력한 가격과 맞지 않습니다"),
 
 
     //좋아요
 
 
     //예매
+    SEAT_ALREADY_BOOKED(HttpStatus.CONFLICT, "이미 존재하는 좌석")
 
 
     ;
