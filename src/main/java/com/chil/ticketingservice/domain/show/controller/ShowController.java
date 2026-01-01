@@ -32,4 +32,16 @@ public class ShowController {
                         )
                 );
     }
+
+    // 공역 삭제 요청/검증 메서드
+    @DeleteMapping("/{showId}")
+    public ResponseEntity<Void> deleteShow(
+            @PathVariable Long showId
+    ) {
+        showService.showDelete(showId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
 }

@@ -1,5 +1,7 @@
 package com.chil.ticketingservice.domain.show.service;
 
+import com.chil.ticketingservice.common.enums.ExceptionCode;
+import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
 import com.chil.ticketingservice.domain.show.dto.response.ShowCreateResponse;
 import com.chil.ticketingservice.domain.show.entity.Show;
@@ -28,5 +30,16 @@ public class ShowService {
         showRepository.save(show);
 
         return ShowCreateResponse.from(show);
+    }
+
+    // 공연 삭제 비지니스 처리 로직 메서드
+    @Transactional
+    public void showDelete(Long showId) {
+        Show show = showRepository.findById(showId)
+                        .orElseThrow(
+                                () -> new CustomException(ExceptionCode.SHOW_NOT_FOUND)
+                        );
+
+        showRepository.deleteById(showId);
     }
 }
