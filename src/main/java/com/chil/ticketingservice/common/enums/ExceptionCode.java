@@ -11,7 +11,10 @@ public enum ExceptionCode {
 
 
     //공연
-    SHOW_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 공연 ID 입니다.")
+    SHOW_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 공연 ID 입니다."),
+    INVALID_SEAT_TYPE(HttpStatus.BAD_REQUEST, "좌석 타입은 VIP, S, A, B 중 하나여야 합니다."),
+    SEAT_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 등록된 좌석입니다.")
+
 
     //좌석 금액
 

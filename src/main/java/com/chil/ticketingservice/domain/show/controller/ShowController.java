@@ -3,8 +3,10 @@ package com.chil.ticketingservice.domain.show.controller;
 import com.chil.ticketingservice.common.dto.CommonResponse;
 import com.chil.ticketingservice.common.enums.SuccessMessage;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
+import com.chil.ticketingservice.domain.show.dto.request.ShowSeatPriceRegRequest;
 import com.chil.ticketingservice.domain.show.dto.response.ShowCreateResponse;
 import com.chil.ticketingservice.domain.show.dto.response.ShowResponse;
+import com.chil.ticketingservice.domain.show.dto.response.ShowSeatPriceRegResponse;
 import com.chil.ticketingservice.domain.show.service.ShowService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,8 @@ public class ShowController {
     // 공연 생성 요청/검증 메서드
     @PostMapping("")
     public ResponseEntity<CommonResponse<ShowCreateResponse>> createShow(
-            @Valid @RequestBody ShowCreateRequest request
+            @Valid
+            @RequestBody ShowCreateRequest request
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -72,6 +75,24 @@ public class ShowController {
                         CommonResponse.success(
                                 SuccessMessage.SHOW_RESPONSE_SUCCESS,
                                 showService.showDetail(showId)
+                        )
+                );
+    }
+
+    // 공연별 좌석 금액 등록 요청/검증 메서드
+    @PostMapping("/{showId}/prices")
+    public ResponseEntity<CommonResponse<ShowSeatPriceRegResponse>> showSeatPriceReg(
+            @PathVariable Long showId,
+
+            @Valid
+            @RequestBody ShowSeatPriceRegRequest request
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        CommonResponse.success(
+                            SuccessMessage.SHOW_CREATE_SEAT_SUCCESS,
+                            showService.showSeatPriceReg(showId, request)
                         )
                 );
     }
