@@ -1,6 +1,8 @@
 package com.chil.ticketingservice.domain.user.service;
 
 import com.chil.ticketingservice.common.config.PasswordEncoder;
+import com.chil.ticketingservice.common.enums.ExceptionCode;
+import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.user.dto.request.UserCreateRequest;
 import com.chil.ticketingservice.domain.user.dto.response.UserCreateResponse;
 import com.chil.ticketingservice.domain.user.entity.User;
@@ -20,6 +22,10 @@ public class UserService {
 
     // 회원가입
     public UserCreateResponse createUser(UserCreateRequest request) {
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new CustomException(ExceptionCode.EXISTS_EMAIL);
+        }
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
 
