@@ -1,5 +1,6 @@
 package com.chil.ticketingservice.domain.user.service;
 
+import com.chil.ticketingservice.common.config.PasswordEncoder;
 import com.chil.ticketingservice.domain.user.dto.request.UserCreateRequest;
 import com.chil.ticketingservice.domain.user.dto.response.UserCreateResponse;
 import com.chil.ticketingservice.domain.user.entity.User;
@@ -15,15 +16,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 회원가입
     public UserCreateResponse createUser(UserCreateRequest request) {
+
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
 
         User user = new User(
                 request.getEmail(),
                 request.getUsername(),
                 request.getBirth(),
-                request.getPassword(),
+                encodedPassword,
                 UserRole.USER
         );
 
