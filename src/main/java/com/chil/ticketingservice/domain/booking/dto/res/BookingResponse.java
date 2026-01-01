@@ -1,22 +1,17 @@
 package com.chil.ticketingservice.domain.booking.dto.res;
 
 import com.chil.ticketingservice.domain.booking.entity.Booking;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Getter
-@AllArgsConstructor
-public class BookingResponse {
-
-    private Long bookingId;
-    private Long showId;
-    private Long userId;
-    private String seat;
-    private Boolean paymentStatus;
-    private LocalDateTime createAt;
-
+public record BookingResponse(
+        Long bookingId,
+        Long showId,
+        Long userId,
+        String seat,
+        Boolean paymentStatus,
+        LocalDateTime createAt
+) {
     public static BookingResponse from(Booking booking) {
         return new BookingResponse(
                 booking.getBookingId(),

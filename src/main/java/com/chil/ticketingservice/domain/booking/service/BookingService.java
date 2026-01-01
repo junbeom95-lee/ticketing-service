@@ -35,26 +35,26 @@ public class BookingService {
                 .orElseThrow(() -> new CustomException(ExceptionCode.EXISTS_EMAIL)); // TODO: USER_NOT_FOUND 예외 추가 필요
 
         // 2. 공연 존재 확인 - showId로 공연 조회
-        Show show = showRepository.findById(request.getShowId())
+        Show show = showRepository.findById(request.showId())
                 .orElseThrow(() -> new CustomException(ExceptionCode.SHOW_NOT_FOUND));
 
         // 3. 좌석 중복 확인 - 해당 공연의 동일 좌석 예매 여부 검증
-        bookingRepository.findByShowIdAndSeat(request.getShowId(), request.getSeat())
+        bookingRepository.findByShowIdAndSeat(request.showId(), request.seat())
                 .ifPresent(booking -> {
                     throw new CustomException(ExceptionCode.SEAT_ALREADY_BOOKED);
                 });
 
         // 4. 가격 검증 - 요청한 가격이 해당 공연의 유효한 가격인지 확인
-        List<Price> prices = priceRepository.findByShowId(request.getShowId());
+        List<Price> prices = priceRepository.findByShowId(request.showId());
         boolean isPriceValid = prices.stream()
-                .anyMatch(price -> price.getSeatPrice() == request.getPrice());
+                .anyMatch(price -> price.getSeatPrice() == request.price());
 
         if (!isPriceValid) {
             throw new CustomException(ExceptionCode.INVALID_PRICE);
         }
 
         // 5. 예매 생성 - 모든 검증 통과 시 예매 생성 및 저장
-        Booking booking = Booking.createBooking(user, show, request.getSeat(), request.getPrice());
+        Booking booking = Booking.createBooking(user, show, request.seat(), request.price());
         Booking savedBooking = bookingRepository.save(booking);
 
         return BookingResponse.from(savedBooking);
