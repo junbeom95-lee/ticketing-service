@@ -60,4 +60,19 @@ public class ShowController {
                         )
                 );
     }
+
+    // 공연 상세 조회 요청/검증 메서드
+    @GetMapping("/{showId}")
+    public ResponseEntity<CommonResponse<ShowResponse>> showDetail (
+        @PathVariable Long showId
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(
+                        CommonResponse.success(
+                                SuccessMessage.SHOW_RESPONSE_SUCCESS,
+                                showService.showDetail(showId)
+                        )
+                );
+    }
 }

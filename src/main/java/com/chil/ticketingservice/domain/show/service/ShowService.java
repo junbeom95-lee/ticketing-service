@@ -54,4 +54,15 @@ public class ShowService {
                 .map(ShowResponse::from)
                 .toList();
     }
+
+    // 공연 상세 조회 비지니스 로직 처리 메서드
+    @Transactional(readOnly = true)
+    public ShowResponse showDetail(Long showId) {
+        Show show = showRepository.findById(showId)
+                .orElseThrow(
+                        () -> new CustomException(ExceptionCode.SHOW_NOT_FOUND)
+                );
+
+        return ShowResponse.from(show);
+    }
 }
