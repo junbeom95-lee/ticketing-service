@@ -83,7 +83,7 @@ public class BookingService {
         return BookingCancelResponse.from(booking);
     }
 
-
+    @Transactional(readOnly = true)
     public BookingDetailResponse getBookingDetail(Long userId, Long bookingId) {
         // 1. 예매 조회
         Booking booking = bookingRepository.findById(bookingId)
