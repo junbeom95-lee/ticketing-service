@@ -6,6 +6,7 @@ import com.chil.ticketingservice.domain.like.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,10 +19,10 @@ public class LikeController {
 
     @PostMapping("/shows/{showId}/likes")
     public ResponseEntity<CommonResponse<Void>> postLike(
-        // TODO: 로그인 유저 정보 추가
+        @AuthenticationPrincipal Long userId,
         @PathVariable Long showId
     ) {
-        SuccessMessage response = likeService.postLike(1L, showId);
+        SuccessMessage response = likeService.postLike(userId, showId);
 
         return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.successNodata(response));
     }
