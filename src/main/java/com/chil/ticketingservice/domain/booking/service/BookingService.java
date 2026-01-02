@@ -31,7 +31,7 @@ public class BookingService {
     public BookingResponse createBooking(Long userId, BookingCreateRequest request) {
         // 1. 사용자 조회 - userId로 사용자 존재 확인
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ExceptionCode.EXISTS_EMAIL)); // TODO: USER_NOT_FOUND 예외 추가 필요
+                .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
 
         // 2. 공연 존재 확인 - showId로 공연 조회
         Show show = showRepository.findById(request.showId())
@@ -49,7 +49,7 @@ public class BookingService {
                 .anyMatch(price -> price.getSeatPrice() == request.price());
 
         if (!isPriceValid) {
-            throw new CustomException(ExceptionCode.PRICE_INVALID);
+            throw new CustomException(ExceptionCode.BOOKING_PRICE_MISMATCH);
         }
 
         // 5. 예매 생성 - 모든 검증 통과 시 예매 생성 및 저장
