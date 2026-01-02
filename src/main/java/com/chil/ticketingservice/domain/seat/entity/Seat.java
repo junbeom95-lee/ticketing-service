@@ -25,7 +25,7 @@ public class Seat {
     private String seatType;
 
     @Column(nullable = false)
-    private int seatNumber;
+    private Integer seatNumber;
 
     @Column(nullable = false)
     private Boolean seatStatus;
