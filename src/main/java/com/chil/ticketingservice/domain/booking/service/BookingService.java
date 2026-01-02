@@ -6,6 +6,7 @@ import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCancelResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCreateResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingDetailResponse;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingPaymentResponse;
 import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
 import com.chil.ticketingservice.domain.price.entity.Price;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -96,5 +98,32 @@ public class BookingService {
 
         // 3. DTO 변환
         return BookingDetailResponse.from(booking);
+    }
+
+    @Transactional
+    public BookingPaymentResponse processPayment(Long userId, Long bookingId) {
+        // 1. 예매 조회
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new CustomException(ExceptionCode.BOOKING_NOT_FOUND));
+
+        // 2. 예매 소유자 확인 - 본인의 예매만 결제 가능
+        if (!booking.getUser().getId().equals(userId)) {
+            throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
+        }
+
+        // 3. 취소된 예매인지 확인
+        if (booking.getIsCanceled()) {
+            throw new CustomException(ExceptionCode.BOOKING_CANCELED_CANNOT_PAY);
+        }
+
+        // 4. 이미 결제된 예매인지 확인
+        if (booking.getPaymentStatus()) {
+            throw new CustomException(ExceptionCode.BOOKING_ALREADY_PAID);
+        }
+
+        // 5. 결제 처리
+        booking.processPayment();
+
+        return BookingPaymentResponse.from(booking);
     }
 }

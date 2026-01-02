@@ -52,4 +52,8 @@ public class Booking extends BaseEntity {
     public void cancelBooking() {
         this.isCanceled = true;
     }
+
+    public void processPayment() {
+        this.paymentStatus = true;
+    }
 }
