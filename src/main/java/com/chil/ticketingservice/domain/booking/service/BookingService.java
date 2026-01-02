@@ -6,6 +6,7 @@ import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCancelResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCreateResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingDetailResponse;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingListResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingPaymentResponse;
 import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
@@ -16,6 +17,8 @@ import com.chil.ticketingservice.domain.show.repository.ShowRepository;
 import com.chil.ticketingservice.domain.user.entity.User;
 import com.chil.ticketingservice.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -125,5 +128,23 @@ public class BookingService {
         booking.processPayment();
 
         return BookingPaymentResponse.from(booking);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<BookingListResponse> getUserBookings(Long userId, Pageable pageable) {
+        // 1. 사용자 존재 확인
+        userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
+
+        // 2. 해당 사용자의 모든 예매 조회 (페이징)
+        Page<Booking> bookings = bookingRepository.findAllByUser_Id(userId, pageable);
+
+        // 3. 예매 정보가 없을 경우 예외 발생
+        if (bookings.isEmpty()) {
+            throw new CustomException(ExceptionCode.BOOKING_NOT_FOUND);
+        }
+
+        // 4. DTO 페이지로 변환
+        return bookings.map(BookingListResponse::from);
     }
 }
