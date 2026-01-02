@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -26,6 +25,7 @@ public class UserService {
     private final JwtUtil jwtUtil;
 
     // 회원가입
+    @Transactional
     public UserCreateResponse createUser(UserCreateRequest request) {
 
         if (userRepository.existsByEmail(request.email())) {
@@ -50,6 +50,7 @@ public class UserService {
     }
 
     // 로그인
+    @Transactional
     public UserLoginResponse login(UserLoginRequest request) {
 
         User user = userRepository.findByEmail(request.email())
@@ -65,6 +66,7 @@ public class UserService {
     }
 
     // 회원 조회
+    @Transactional(readOnly = true)
     public UserGetResponse getUser(Long userId) {
 
         User user = userRepository.findById(userId)
