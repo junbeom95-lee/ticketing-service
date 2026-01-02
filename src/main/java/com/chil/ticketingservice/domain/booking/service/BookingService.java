@@ -5,6 +5,7 @@ import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCancelResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCreateResponse;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingDetailResponse;
 import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
 import com.chil.ticketingservice.domain.price.entity.Price;
@@ -82,5 +83,18 @@ public class BookingService {
         return BookingCancelResponse.from(booking);
     }
 
+    @Transactional(readOnly = true)
+    public BookingDetailResponse getBookingDetail(Long userId, Long bookingId) {
+        // 1. 예매 조회
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new CustomException(ExceptionCode.BOOKING_NOT_FOUND));
 
+        // 2. 본인 예매인지 검증
+        if (!booking.getUser().getId().equals(userId)) {
+            throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
+        }
+
+        // 3. DTO 변환
+        return BookingDetailResponse.from(booking);
+    }
 }
