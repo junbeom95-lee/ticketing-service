@@ -8,6 +8,7 @@ import com.chil.ticketingservice.common.enums.SuccessMessage;
 import com.chil.ticketingservice.domain.like.dto.response.LikeCountResponse;
 import com.chil.ticketingservice.domain.like.entity.Like;
 import com.chil.ticketingservice.domain.like.repository.LikeRepository;
+import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
 import com.chil.ticketingservice.domain.show.entity.Show;
 import com.chil.ticketingservice.domain.show.repository.ShowRepository;
 import com.chil.ticketingservice.domain.user.entity.User;
@@ -47,7 +48,8 @@ class LikeServiceIntegrationTest {
         user = new User("fortest@test.com", "test", LocalDate.now(), "1234", UserRole.USER);
         userRepository.save(user);
 
-        show = new Show("test title", "DDP", LocalDateTime.now().plusDays(3), 15L, "descriptions", 1L);
+        ShowCreateRequest request = new ShowCreateRequest("test title", "DDP", LocalDateTime.now().plusDays(3), 15L, "descriptions", "image");
+        show = new Show(request);
         showRepository.save(show);
     }
 
