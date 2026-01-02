@@ -33,7 +33,7 @@ public class LikeController {
 
     @GetMapping("/shows/{showId}/likes")
     public ResponseEntity<CommonResponse<LikeCountResponse>> countLikes(
-        @PathVariable long showId
+        @PathVariable Long showId
     ) {
         LikeCountResponse response = likeService.countLikes(showId);
         return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success(LIKE_COUNT_SUCCESS, response));
