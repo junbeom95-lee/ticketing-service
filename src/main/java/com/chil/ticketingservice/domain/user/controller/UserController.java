@@ -3,7 +3,10 @@ package com.chil.ticketingservice.domain.user.controller;
 import com.chil.ticketingservice.common.dto.CommonResponse;
 import com.chil.ticketingservice.common.enums.SuccessMessage;
 import com.chil.ticketingservice.domain.user.dto.request.UserCreateRequest;
+import com.chil.ticketingservice.domain.user.dto.request.UserLoginRequest;
 import com.chil.ticketingservice.domain.user.dto.response.UserCreateResponse;
+import com.chil.ticketingservice.domain.user.dto.response.UserLoginResponse;
+import com.chil.ticketingservice.domain.user.repository.UserRepository;
 import com.chil.ticketingservice.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     // 회원가입
     @PostMapping("/users")
@@ -26,6 +30,17 @@ public class UserController {
                 CommonResponse.success(
                         SuccessMessage.USER_CREATE_SUCCESS,
                         userService.createUser(request)
+                )
+        );
+    }
+
+    // 로그인
+    @PostMapping("/auth/login")
+    public ResponseEntity<CommonResponse<UserLoginResponse>> login(@Valid @RequestBody UserLoginRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                CommonResponse.success(
+                        SuccessMessage.AUTH_LOGIN_SUCCESS,
+                        userService.login(request)
                 )
         );
     }
