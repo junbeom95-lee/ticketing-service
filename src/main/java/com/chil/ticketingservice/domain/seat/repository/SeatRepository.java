@@ -16,9 +16,11 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
     @Query("""
         select new com.chil.ticketingservice.domain.seat.dto.response.SeatAvailableResponse(concat(s.seatType, s.seatNumber))
         from Seat s
-        where s.show = :show and s.seatType = :seatType
+        where s.show = :show 
+        and s.seatType = :seatType
+        and s.seatStatus = true
         """)
-    List<SeatAvailableResponse> findAllByShowAndSeatType(@Param("show") Show show, @Param("seatType")SeatTypeEnum seatType);
+    List<SeatAvailableResponse> findAllByShowAndSeatTypeAndSeatStatus(@Param("show") Show show, @Param("seatType")SeatTypeEnum seatType);
 
     @Query("""
         select new com.chil.ticketingservice.domain.seat.dto.response.SeatAvailableTypeResponse(
@@ -26,7 +28,8 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
                 )
         from Seat s
         where s.show = :show
+        and s.seatStatus = true
         group by s.seatType
         """)
-    List<SeatAvailableTypeResponse> findCountByShowId(@Param("show") Show show);
+    List<SeatAvailableTypeResponse> countByShow(@Param("show") Show show);
 }

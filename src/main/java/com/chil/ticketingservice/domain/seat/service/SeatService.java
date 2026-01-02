@@ -41,7 +41,7 @@ public class SeatService {
 
         Show savedShow = showRepository.findShowById(showId);
 
-        return seatRepository.findAllByShowAndSeatType(savedShow, seatType);
+        return seatRepository.findAllByShowAndSeatTypeAndSeatStatus(savedShow, seatType);
     }
 
     //좌석 등급별 남은 좌석 수 조회
@@ -50,7 +50,7 @@ public class SeatService {
 
         Show savedShow = showRepository.findShowById(showId);
 
-        return seatRepository.findCountByShowId(savedShow);
+        return seatRepository.countByShow(savedShow);
     }
 
     //특정 show 좌석 리스트 생성
