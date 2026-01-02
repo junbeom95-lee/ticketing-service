@@ -13,6 +13,7 @@ import com.chil.ticketingservice.domain.like.entity.Like;
 import com.chil.ticketingservice.domain.like.repository.LikeRepository;
 import com.chil.ticketingservice.domain.show.entity.Show;
 import com.chil.ticketingservice.domain.user.entity.User;
+import com.chil.ticketingservice.domain.user.enums.UserRole;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +38,7 @@ class LikeServiceTest {
     void postLike_create() {
 
         // Given
-        User user = new User("test@test.com", "test", LocalDate.now(), "1234", "USER");
+        User user = new User("test@test.com", "test", LocalDate.now(), "1234", UserRole.USER);
         ReflectionTestUtils.setField(user, "id", 1L);
 
         Show show = new Show("test title", "DDP", LocalDateTime.now().plusDays(3), 15L, "descriptions", 1L);
@@ -62,7 +63,7 @@ class LikeServiceTest {
     void postLike_delete() {
 
         // Given
-        User user = new User("test@test.com", "test", LocalDate.now(), "1234", "USER");
+        User user = new User("test@test.com", "test", LocalDate.now(), "1234", UserRole.USER);
         ReflectionTestUtils.setField(user, "id", 1L);
 
         Show show = new Show("test title", "DDP", LocalDateTime.now().plusDays(3), 15L, "descriptions", 1L);
