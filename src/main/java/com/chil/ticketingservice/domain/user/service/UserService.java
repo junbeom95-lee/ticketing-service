@@ -44,7 +44,9 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
 
-        return new UserCreateResponse(savedUser.getId());
+        String token = jwtUtil.generateToken(savedUser.getId(), savedUser.getRole());
+
+        return new UserCreateResponse(token);
     }
 
     // 로그인
