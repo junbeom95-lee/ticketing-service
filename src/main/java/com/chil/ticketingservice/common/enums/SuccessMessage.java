@@ -7,6 +7,7 @@ public enum SuccessMessage {
 
     AUTH_LOGIN_SUCCESS("로그인 성공"),
 
+    BOOKING_CREATE_SUCCESS("예매 성공"),
 
     ;
 
