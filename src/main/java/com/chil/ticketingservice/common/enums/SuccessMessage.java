@@ -17,7 +17,7 @@ public enum SuccessMessage {
     // 예매
     BOOKING_CREATE_SUCCESS("예매 성공."),
     BOOKING_CANCEL_SUCCESS("예매 취소 성공."),
-    BOOKING_GET_SUCCESS("예매 조회 성공"),
+    BOOKING_GET_SUCCESS("예매 조회 성공."),
 
     //좋아요
     LIKE_CREATE_SUCCESS("좋아요가 생성되었습니다."),
@@ -25,8 +25,8 @@ public enum SuccessMessage {
     LIKE_COUNT_SUCCESS("좋아요 개수를 조회했습니다."),
 
     //좌석
-    SEAT_GET_AVAILABLE_SUCCESS("예매 가능한 좌석 목록 조회 성공"),
-    SEAT_GET_AVAILABLE_TYPE_SUCCESS("좌석 등급별 남은 좌석 수 조회 성공"),
+    SEAT_GET_AVAILABLE_SUCCESS("예매 가능한 좌석 목록 조회 성공."),
+    SEAT_GET_AVAILABLE_TYPE_SUCCESS("좌석 등급별 남은 좌석 수 조회 성공."),
 
 
     ;
