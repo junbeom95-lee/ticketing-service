@@ -15,7 +15,7 @@ public enum ExceptionCode {
 
 
     //좌석 금액
-    INVALID_PRICE(HttpStatus.CONFLICT, "입력한 가격과 맞지 않습니다"),
+    PRICE_INVALID(HttpStatus.CONFLICT, "입력한 가격과 맞지 않습니다"),
 
 
     //좋아요

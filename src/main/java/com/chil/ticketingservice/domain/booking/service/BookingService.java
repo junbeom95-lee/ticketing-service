@@ -49,7 +49,7 @@ public class BookingService {
                 .anyMatch(price -> price.getSeatPrice() == request.price());
 
         if (!isPriceValid) {
-            throw new CustomException(ExceptionCode.INVALID_PRICE);
+            throw new CustomException(ExceptionCode.PRICE_INVALID);
         }
 
         // 5. 예매 생성 - 모든 검증 통과 시 예매 생성 및 저장
