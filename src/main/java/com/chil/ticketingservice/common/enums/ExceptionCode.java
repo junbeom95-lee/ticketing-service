@@ -10,6 +10,8 @@ public enum ExceptionCode {
     EMAIL_EXIST(HttpStatus.CONFLICT, "이메일이 존재합니다."),
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 올바르지 않습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원이 존재하지 않습니다."),
+    LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
 
     //공연
     SHOW_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 공연 ID"),
