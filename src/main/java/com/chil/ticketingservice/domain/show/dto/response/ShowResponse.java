@@ -1,8 +1,6 @@
 package com.chil.ticketingservice.domain.show.dto.response;
 
 import com.chil.ticketingservice.domain.show.entity.Show;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 
