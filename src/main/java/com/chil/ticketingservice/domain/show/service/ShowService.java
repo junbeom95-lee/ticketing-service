@@ -1,16 +1,10 @@
 package com.chil.ticketingservice.domain.show.service;
 
-import com.chil.ticketingservice.common.enums.ExceptionCode;
-import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
-import com.chil.ticketingservice.domain.show.dto.request.ShowSeatPriceRegRequest;
 import com.chil.ticketingservice.domain.show.dto.response.ShowCreateResponse;
 import com.chil.ticketingservice.domain.show.dto.response.ShowResponse;
-import com.chil.ticketingservice.domain.show.dto.response.ShowSeatPriceRegResponse;
-import com.chil.ticketingservice.domain.show.entity.SeatPrice;
 import com.chil.ticketingservice.domain.show.entity.Show;
-import com.chil.ticketingservice.domain.show.enums.SeatTypeEnum;
-import com.chil.ticketingservice.domain.show.repository.SeatPriceRepository;
+import com.chil.ticketingservice.domain.price.repository.PriceRepository;
 import com.chil.ticketingservice.domain.show.repository.ShowRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +17,7 @@ import java.util.List;
 public class ShowService {
 
     private final ShowRepository showRepository;
-    private final SeatPriceRepository seatPriceRepository;
+    private final PriceRepository seatPriceRepository;
 
     // 공연 생성 비지니스 처리 로직 메서드
     @Transactional
@@ -64,32 +58,5 @@ public class ShowService {
         Show show = showRepository.findShowById(showId);
 
         return ShowResponse.from(show);
-    }
-
-    // 공연별 좌석 금액 등록 비지니스 로직 처리 메서드
-    @Transactional
-    public ShowSeatPriceRegResponse showSeatPriceReg(
-            Long showId,
-            ShowSeatPriceRegRequest request
-    ) {
-        Show show = showRepository.findShowById(showId);
-
-        SeatTypeEnum seatType = SeatTypeEnum.of(request.getSeatType());
-
-        boolean existsSeatPrice = seatPriceRepository.existsByShow_IdAndSeatType(showId, seatType);
-
-        if (existsSeatPrice) {
-            throw new CustomException(ExceptionCode.SEAT_ALREADY_EXISTS);
-        }
-
-        SeatPrice seatPrice = new SeatPrice(
-                show,
-                seatType,
-                request.getPrice()
-        );
-
-        SeatPrice seatPriceSave = seatPriceRepository.save(seatPrice);
-
-        return ShowSeatPriceRegResponse.from(seatPriceSave);
     }
 }

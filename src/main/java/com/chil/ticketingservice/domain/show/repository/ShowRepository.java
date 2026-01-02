@@ -6,6 +6,7 @@ import com.chil.ticketingservice.domain.show.entity.Show;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ShowRepository extends JpaRepository<Show, Long> {
+
     default Show findShowById(Long id) {
         return findById(id).orElseThrow(
                 () -> new CustomException(ExceptionCode.SHOW_NOT_FOUND)

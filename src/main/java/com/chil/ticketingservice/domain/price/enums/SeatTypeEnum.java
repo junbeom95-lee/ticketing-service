@@ -1,4 +1,4 @@
-package com.chil.ticketingservice.domain.show.enums;
+package com.chil.ticketingservice.domain.price.enums;
 
 import com.chil.ticketingservice.common.enums.ExceptionCode;
 import com.chil.ticketingservice.common.exception.CustomException;
