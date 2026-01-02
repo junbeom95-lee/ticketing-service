@@ -47,6 +47,7 @@ public class LikeService {
         return LIKE_CREATE_SUCCESS;
     }
 
+    // 공연별 좋아요 수 조회
     @Transactional(readOnly = true)
     public LikeCountResponse countLikes(long showId) {
 

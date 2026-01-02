@@ -21,6 +21,7 @@ public class LikeController {
 
     private final LikeService likeService;
 
+    // 좋아요 생성/삭제
     @PostMapping("/shows/{showId}/likes")
     public ResponseEntity<CommonResponse<Void>> postLike(
         @AuthenticationPrincipal Long userId,
@@ -31,11 +32,13 @@ public class LikeController {
         return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.successNodata(response));
     }
 
+    // 공연별 좋아요 수 조회
     @GetMapping("/shows/{showId}/likes")
     public ResponseEntity<CommonResponse<LikeCountResponse>> countLikes(
         @PathVariable Long showId
     ) {
         LikeCountResponse response = likeService.countLikes(showId);
+
         return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success(LIKE_COUNT_SUCCESS, response));
     }
 }
