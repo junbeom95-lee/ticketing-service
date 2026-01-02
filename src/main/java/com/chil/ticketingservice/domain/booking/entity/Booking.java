@@ -1,5 +1,6 @@
 package com.chil.ticketingservice.domain.booking.entity;
 
+import com.chil.ticketingservice.common.entity.BaseEntity;
 import com.chil.ticketingservice.domain.show.entity.Show;
 import com.chil.ticketingservice.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -7,13 +8,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Entity
 @Table(name = "bookings")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Booking {
+public class Booking extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,17 +34,18 @@ public class Booking {
 
     @Column(nullable = false)
     private Boolean paymentStatus;
-    
+
     @Column(nullable = false)
     private Boolean isCanceled;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    protected void onCreate(){
-        createdAt = LocalDateTime.now();
-        paymentStatus = false;
-        isCanceled = false;
+    public static Booking createBooking(User user, Show show, String seat, Integer price) {
+        Booking booking = new Booking();
+        booking.user = user;
+        booking.show = show;
+        booking.seat = seat;
+        booking.price = price;
+        booking.paymentStatus = false;
+        booking.isCanceled = false;
+        return booking;
     }
 }
