@@ -7,8 +7,9 @@ import org.springframework.http.HttpStatus;
 public enum ExceptionCode {
 
     //유저
-    EXISTS_EMAIL(HttpStatus.BAD_REQUEST, "이메일이 존재합니다."),
+    EMAIL_EXIST(HttpStatus.BAD_REQUEST, "이메일이 존재합니다."),
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 올바르지 않습니다."),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원이 존재하지 않습니다.")
 
     //공연
 

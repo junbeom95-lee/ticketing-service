@@ -6,6 +6,7 @@ import com.chil.ticketingservice.common.utils.JwtUtil;
 import com.chil.ticketingservice.domain.user.dto.request.UserCreateRequest;
 import com.chil.ticketingservice.domain.user.dto.request.UserLoginRequest;
 import com.chil.ticketingservice.domain.user.dto.response.UserCreateResponse;
+import com.chil.ticketingservice.domain.user.dto.response.UserGetResponse;
 import com.chil.ticketingservice.domain.user.dto.response.UserLoginResponse;
 import com.chil.ticketingservice.domain.user.entity.User;
 import com.chil.ticketingservice.domain.user.enums.UserRole;
@@ -28,7 +29,7 @@ public class UserService {
     public UserCreateResponse createUser(UserCreateRequest request) {
 
         if (userRepository.existsByEmail(request.email())) {
-            throw new CustomException(ExceptionCode.EXISTS_EMAIL);
+            throw new CustomException(ExceptionCode.EMAIL_EXIST);
         }
 
         String encodedPassword = passwordEncoder.encode(request.password());
@@ -59,5 +60,14 @@ public class UserService {
         String token = jwtUtil.generateToken(user.getId(), user.getRole());
 
         return new UserLoginResponse(token);
+    }
+
+    // 회원 조회
+    public UserGetResponse getUser(Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
+
+        return UserGetResponse.from(user);
     }
 }
