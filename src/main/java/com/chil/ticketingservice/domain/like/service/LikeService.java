@@ -20,7 +20,7 @@ public class LikeService {
 
     // 좋아요 생성/삭제
     @Transactional
-    public SuccessMessage postLike(long userId, long showId) {
+    public SuccessMessage postLike(Long userId, Long showId) {
 
         // TODO: 로그인 정보로 유저 객체 생성
         User user;

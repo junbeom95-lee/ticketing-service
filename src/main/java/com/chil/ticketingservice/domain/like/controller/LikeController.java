@@ -19,7 +19,7 @@ public class LikeController {
     @PostMapping("/shows/{showId}/likes")
     public ResponseEntity<CommonResponse<Void>> postLike(
         // TODO: 로그인 유저 정보 추가
-        @PathVariable long showId
+        @PathVariable Long showId
     ) {
         SuccessMessage response = likeService.postLike(1L, showId);
 
