@@ -7,6 +7,8 @@ import com.chil.ticketingservice.domain.show.entity.Show;
 import com.chil.ticketingservice.domain.price.repository.PriceRepository;
 import com.chil.ticketingservice.domain.show.repository.ShowRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,11 +47,8 @@ public class ShowService {
 
     // 공연 조회 리스트 비지니스 로직 처리 메서드
     @Transactional(readOnly = true)
-    public List<ShowResponse> showList() {
-        return showRepository.findAll()
-                .stream()
-                .map(ShowResponse::from)
-                .toList();
+    public Page<ShowResponse> showList(Pageable pageable) {
+        return showRepository.ShowSearch(pageable);
     }
 
     // 공연 상세 조회 비지니스 로직 처리 메서드

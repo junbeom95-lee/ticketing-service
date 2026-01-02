@@ -10,6 +10,8 @@ import com.chil.ticketingservice.domain.price.dto.response.ShowSeatPriceRegRespo
 import com.chil.ticketingservice.domain.show.service.ShowService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,7 @@ public class ShowController {
     private final ShowService showService;
 
     // 공연 생성 요청/검증 메서드
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<CommonResponse<ShowCreateResponse>> createShow(
             @Valid
             @RequestBody ShowCreateRequest request
@@ -52,14 +54,16 @@ public class ShowController {
     }
 
     // 공연 조회 리스트 요청/검증 메서드
-    @GetMapping("")
-    public ResponseEntity<CommonResponse<List<ShowResponse>>> showList() {
+    @GetMapping
+    public ResponseEntity<CommonResponse<Page<ShowResponse>>> showList(
+            Pageable pageable
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(
                         CommonResponse.success(
                                 SuccessMessage.SHOW_RESPONSE_SUCCESS,
-                                showService.showList()
+                                showService.showList(pageable)
                         )
                 );
     }
