@@ -28,7 +28,7 @@ public class PriceService {
     ) {
         Show show = showRepository.findShowById(showId);
 
-        SeatTypeEnum seatType = SeatTypeEnum.of(request.seatType());
+        SeatTypeEnum seatType = request.seatType();
 
         boolean existsSeatPrice = priceRepository.existsByShow_IdAndSeatType(showId, seatType);
 
