@@ -26,12 +26,14 @@ public class PriceController {
             @Valid
             @RequestBody ShowSeatPriceRegRequest request
     ) {
+        ShowSeatPriceRegResponse result = priceService.showSeatPriceReg(showId, request);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
                         CommonResponse.success(
                                 SuccessMessage.SHOW_CREATE_SEAT_SUCCESS,
-                                priceService.showSeatPriceReg(showId, request)
+                                result
                         )
                 );
     }
