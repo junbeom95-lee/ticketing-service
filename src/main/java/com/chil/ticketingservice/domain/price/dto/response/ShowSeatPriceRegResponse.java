@@ -1,7 +1,7 @@
 package com.chil.ticketingservice.domain.price.dto.response;
 
 import com.chil.ticketingservice.domain.price.entity.Price;
-import com.chil.ticketingservice.domain.price.enums.SeatTypeEnum;
+import com.chil.ticketingservice.domain.seat.enums.SeatTypeEnum;
 
 public record ShowSeatPriceRegResponse(
     Long showId,

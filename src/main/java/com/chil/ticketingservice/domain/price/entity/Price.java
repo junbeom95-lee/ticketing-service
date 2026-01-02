@@ -1,7 +1,7 @@
 package com.chil.ticketingservice.domain.price.entity;
 
 import com.chil.ticketingservice.domain.show.entity.Show;
-import com.chil.ticketingservice.domain.price.enums.SeatTypeEnum;
+import com.chil.ticketingservice.domain.seat.enums.SeatTypeEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
