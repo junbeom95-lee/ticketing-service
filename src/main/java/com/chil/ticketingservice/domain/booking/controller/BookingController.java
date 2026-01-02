@@ -71,9 +71,9 @@ public class BookingController {
                 .body(CommonResponse.success(SuccessMessage.BOOKING_PAYMENT_SUCCESS, response));
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping
     public ResponseEntity<CommonResponse<Page<BookingListResponse>>> getUserBookings(
-            @PathVariable Long userId,
+            @AuthenticationPrincipal Long userId,
             @PageableDefault(size = 10, sort = "bookingId") Pageable pageable
     ) {
         Page<BookingListResponse> response = bookingService.getUserBookings(userId, pageable);
