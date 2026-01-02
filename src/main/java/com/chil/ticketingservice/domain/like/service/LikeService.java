@@ -31,13 +31,8 @@ public class LikeService {
     @Transactional
     public SuccessMessage postLike(Long userId, Long showId) {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        log.info("auth = {}", auth);
-
         User user = userRepository.findUserById(userId);
-        // TODO: default 메서드로 변경
-        Show show = showRepository.findById(showId)
-            .orElseThrow(() -> new RuntimeException("Show Not Found"));
+        Show show = showRepository.findShowById(showId);
 
         boolean exist = likeRepository.existsByUserIdAndShowId(userId, showId);
 
@@ -57,8 +52,7 @@ public class LikeService {
     @Transactional(readOnly = true)
     public LikeCountResponse countLikes(long showId) {
 
-        Show show = showRepository.findById(showId)
-            .orElseThrow(() -> new RuntimeException("Show Not Found"));
+        Show show = showRepository.findShowById(showId);
 
         long likes = likeRepository.countByShow(show);
 
