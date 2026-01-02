@@ -27,7 +27,9 @@ public enum ExceptionCode {
 
     //예매
     SEAT_ALREADY_BOOKED(HttpStatus.CONFLICT, "이미 예약된 자석"),
-    BOOKING_PRICE_MISMATCH(HttpStatus.CONFLICT, "좌석 가격이 일치하지 않습니다")
+    BOOKING_PRICE_MISMATCH(HttpStatus.CONFLICT, "좌석 가격이 일치하지 않습니다"),
+    BOOKING_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 예매입니다"),
+    BOOKING_ALREADY_CANCELED(HttpStatus.BAD_REQUEST, "이미 취소된 예매입니다")
 
 
     ;

@@ -12,7 +12,11 @@ public enum SuccessMessage {
     // 공연
     SHOW_CREATE_SUCCESS("공연이 생성되었습니다"),
     SHOW_RESPONSE_SUCCESS("공연 검색 성공"),
-    SHOW_CREATE_SEAT_SUCCESS("공연 좌석 가격이 생성 되었습니다.")
+    SHOW_CREATE_SEAT_SUCCESS("공연 좌석 가격이 생성 되었습니다."),
+
+    // 예매
+    BOOKING_CREATE_SUCCESS("예매 성공"),
+    BOOKING_CANCEL_SUCCESS("예매 취소 성공")
 
     ;
 
