@@ -8,9 +8,9 @@ import com.chil.ticketingservice.domain.like.entity.Like;
 import com.chil.ticketingservice.domain.like.repository.LikeRepository;
 import com.chil.ticketingservice.domain.show.entity.Show;
 import com.chil.ticketingservice.domain.user.entity.User;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
