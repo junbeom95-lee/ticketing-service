@@ -60,17 +60,22 @@ public class BookingService {
     }
 
     @Transactional
-    public BookingResponse cancelBooking(Long bookingId) {
+    public BookingResponse cancelBooking(Long userId, Long bookingId) {
         // 1. 예매 조회
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.BOOKING_NOT_FOUND));
 
-        // 2. 이미 취소된 예매인지 확인
+        // 2. 예매 소유자 확인 - 본인의 예매만 취소 가능
+        if (!booking.getUser().getId().equals(userId)) {
+            throw new CustomException(ExceptionCode.ACCESS_DENIED);
+        }
+
+        // 3. 이미 취소된 예매인지 확인
         if (booking.getIsCanceled()) {
             throw new CustomException(ExceptionCode.BOOKING_ALREADY_CANCELED);
         }
 
-        // 3. 예매 취소 처리
+        // 4. 예매 취소 처리
         booking.cancelBooking();
 
         return BookingResponse.from(booking);

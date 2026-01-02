@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -21,11 +22,9 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<CommonResponse<BookingResponse>> createBooking(
+            @AuthenticationPrincipal Long userId,
             @Valid @RequestBody BookingCreateRequest request
     ) {
-        // TODO: Spring Security 구현 후 SecurityContext에서 userId 가져오기
-        Long userId = 1L; // 임시 userId
-
         BookingResponse response = bookingService.createBooking(userId, request);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -34,9 +33,10 @@ public class BookingController {
 
     @PutMapping("/{bookingId}/cancellation")
     public ResponseEntity<CommonResponse<BookingResponse>> cancelBooking(
+            @AuthenticationPrincipal Long userId,
             @PathVariable Long bookingId
     ) {
-        BookingResponse response = bookingService.cancelBooking(bookingId);
+        BookingResponse response = bookingService.cancelBooking(userId, bookingId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.success(SuccessMessage.BOOKING_CANCEL_SUCCESS, response));
