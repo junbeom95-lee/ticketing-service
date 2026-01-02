@@ -139,12 +139,7 @@ public class BookingService {
         // 2. 해당 사용자의 모든 예매 조회 (페이징)
         Page<Booking> bookings = bookingRepository.findAllByUser_Id(userId, pageable);
 
-        // 3. 예매 정보가 없을 경우 예외 발생
-        if (bookings.isEmpty()) {
-            throw new CustomException(ExceptionCode.BOOKING_NOT_FOUND);
-        }
-
-        // 4. DTO 페이지로 변환
+        // 3. DTO 페이지로 변환 (빈 페이지도 정상 응답)
         return bookings.map(BookingListResponse::from);
     }
 }
