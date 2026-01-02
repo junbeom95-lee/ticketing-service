@@ -20,7 +20,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class BookingService {
 
     private final BookingRepository bookingRepository;
