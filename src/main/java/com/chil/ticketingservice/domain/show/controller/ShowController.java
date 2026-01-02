@@ -31,12 +31,14 @@ public class ShowController {
             @Valid
             @RequestBody ShowCreateRequest request
     ) {
+        ShowCreateResponse result = showService.createShow(request);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
                         CommonResponse.success(
                                 SuccessMessage.SHOW_CREATE_SUCCESS,
-                                showService.createShow(request)
+                                result
                         )
                 );
     }
@@ -58,12 +60,14 @@ public class ShowController {
     public ResponseEntity<CommonResponse<Page<ShowResponse>>> showList(
             Pageable pageable
     ) {
+        Page<ShowResponse> result = showService.showList(pageable);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(
                         CommonResponse.success(
                                 SuccessMessage.SHOW_RESPONSE_SUCCESS,
-                                showService.showList(pageable)
+                                result
                         )
                 );
     }
@@ -73,12 +77,14 @@ public class ShowController {
     public ResponseEntity<CommonResponse<ShowResponse>> showDetail (
         @PathVariable Long showId
     ) {
+        ShowResponse result = showService.showDetail(showId);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(
                         CommonResponse.success(
                                 SuccessMessage.SHOW_RESPONSE_SUCCESS,
-                                showService.showDetail(showId)
+                                result
                         )
                 );
     }
