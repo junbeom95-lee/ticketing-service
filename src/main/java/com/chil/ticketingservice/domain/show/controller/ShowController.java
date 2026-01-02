@@ -25,10 +25,9 @@ public class ShowController {
     // 공연 생성 요청/검증 메서드
     @PostMapping
     public ResponseEntity<CommonResponse<ShowCreateResponse>> createShow(
-            @AuthenticationPrincipal Long creatorId,
             @Valid @RequestBody ShowCreateRequest request
     ) {
-        ShowCreateResponse result = showService.createShow(creatorId, request);
+        ShowCreateResponse result = showService.createShow(request);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

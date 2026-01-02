@@ -23,10 +23,8 @@ public class ShowService {
 
     // 공연 생성 비지니스 처리 로직 메서드
     @Transactional
-    public ShowCreateResponse createShow(Long creatorId, ShowCreateRequest request) {
+    public ShowCreateResponse createShow(ShowCreateRequest request) {
         Show show = new Show(request);
-
-        show.creatorId(creatorId);
 
         Show showSave = showRepository.save(show);
 
@@ -36,7 +34,7 @@ public class ShowService {
     // 공연 삭제 비지니스 로직 처리 메서드
     @Transactional
     public void showDelete(Long showId) {
-        Show show = showRepository.findShowById(showId);
+        showRepository.findShowById(showId);
 
         showRepository.deleteById(showId);
     }
@@ -44,7 +42,7 @@ public class ShowService {
     // 공연 조회 리스트 비지니스 로직 처리 메서드
     @Transactional(readOnly = true)
     public Page<ShowResponse> showList(Pageable pageable) {
-        return showRepository.ShowSearch(pageable);
+        return showRepository.showSearch(pageable);
     }
 
     // 공연 상세 조회 비지니스 로직 처리 메서드

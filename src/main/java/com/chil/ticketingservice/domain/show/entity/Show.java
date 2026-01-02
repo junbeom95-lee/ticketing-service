@@ -36,9 +36,6 @@ public class Show extends BaseEntity {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private Long creator;
-
     @Column
     private String imageUrl;
 
@@ -48,10 +45,5 @@ public class Show extends BaseEntity {
         this.showDate = request.showDate();
         this.ageRating = request.ageRating();
         this.description = request.description();
-    }
-
-    // 관리자 고유 번호 주입 메서드
-    public void creatorId (Long creator) {
-        this.creator = creator;
     }
 }
