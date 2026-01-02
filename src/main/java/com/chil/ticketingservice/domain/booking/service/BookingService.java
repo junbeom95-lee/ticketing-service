@@ -111,14 +111,14 @@ public class BookingService {
             throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
         }
 
-        // 3. 취소된 예매인지 확인
-        if (booking.getIsCanceled()) {
-            throw new CustomException(ExceptionCode.BOOKING_CANCELED_CANNOT_PAY);
-        }
-
-        // 4. 이미 결제된 예매인지 확인
+        // 3. 이미 결제된 예매인지 확인
         if (booking.getPaymentStatus()) {
             throw new CustomException(ExceptionCode.BOOKING_ALREADY_PAID);
+        }
+
+        // 4. 취소된 예매인지 확인
+        if (booking.getIsCanceled()) {
+            throw new CustomException(ExceptionCode.BOOKING_CANCELED_CANNOT_PAY);
         }
 
         // 5. 결제 처리
