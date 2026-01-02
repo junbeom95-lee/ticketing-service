@@ -3,6 +3,7 @@ package com.chil.ticketingservice.domain.price.service;
 import com.chil.ticketingservice.common.enums.ExceptionCode;
 import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.price.dto.request.ShowSeatPriceRegRequest;
+import com.chil.ticketingservice.domain.price.dto.response.PriceShowSeatOneResponse;
 import com.chil.ticketingservice.domain.price.dto.response.PriceShowSeatResponse;
 import com.chil.ticketingservice.domain.price.dto.response.ShowSeatPriceRegResponse;
 import com.chil.ticketingservice.domain.price.entity.Price;
@@ -62,5 +63,16 @@ public class PriceService {
                 .stream()
                 .map(p -> new PriceShowSeatResponse(p.getSeatType(), p.getPrice()))
                 .toList();
+    }
+
+    //공연별 좌석 금액 단건 조회
+    @Transactional(readOnly = true)
+    public PriceShowSeatOneResponse getPriceShowSeatOne(Long showId, SeatTypeEnum seatType) {
+
+        Show show = showRepository.findShowById(showId);
+
+        Price price = priceRepository.findWithShowAndSeatType(show, seatType);
+
+        return new PriceShowSeatOneResponse(price.getPrice());
     }
 }

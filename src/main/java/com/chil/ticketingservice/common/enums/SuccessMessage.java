@@ -29,6 +29,7 @@ public enum SuccessMessage {
     SEAT_GET_AVAILABLE_TYPE_SUCCESS("좌석 등급별 남은 좌석 수 조회 성공."),
 
     //금액
+    PRICE_SHOW_SEAT_SUCCESS("공연별 좌석 금액 단건 조회 성공."),
     PRICE_SHOW_SEAT_LIST_SUCCESS("공연별 좌석 금액 목록 조회 성공."),
 
 

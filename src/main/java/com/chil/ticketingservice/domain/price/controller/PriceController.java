@@ -3,9 +3,11 @@ package com.chil.ticketingservice.domain.price.controller;
 import com.chil.ticketingservice.common.dto.CommonResponse;
 import com.chil.ticketingservice.common.enums.SuccessMessage;
 import com.chil.ticketingservice.domain.price.dto.request.ShowSeatPriceRegRequest;
+import com.chil.ticketingservice.domain.price.dto.response.PriceShowSeatOneResponse;
 import com.chil.ticketingservice.domain.price.dto.response.PriceShowSeatResponse;
 import com.chil.ticketingservice.domain.price.dto.response.ShowSeatPriceRegResponse;
 import com.chil.ticketingservice.domain.price.service.PriceService;
+import com.chil.ticketingservice.domain.seat.enums.SeatTypeEnum;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +27,6 @@ public class PriceController {
     @PostMapping("/{showId}/prices")
     public ResponseEntity<CommonResponse<ShowSeatPriceRegResponse>> showSeatPriceReg(
             @PathVariable Long showId,
-
             @Valid
             @RequestBody ShowSeatPriceRegRequest request
     ) {
@@ -53,4 +54,16 @@ public class PriceController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    //공연별 좌석 금액 단건 조회
+    @GetMapping("/{showId}/prices/{seatType}")
+    ResponseEntity<CommonResponse<PriceShowSeatOneResponse>> getPriceShowSeatOne(@PathVariable Long showId,
+                                                                                  @PathVariable SeatTypeEnum seatType) {
+
+        PriceShowSeatOneResponse priceShowSeatOneResponse = priceService.getPriceShowSeatOne(showId, seatType);
+
+        CommonResponse<PriceShowSeatOneResponse> response =
+                CommonResponse.success(SuccessMessage.PRICE_SHOW_SEAT_SUCCESS, priceShowSeatOneResponse);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
