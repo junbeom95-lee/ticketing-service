@@ -6,7 +6,6 @@ import com.chil.ticketingservice.domain.user.dto.request.UserCreateRequest;
 import com.chil.ticketingservice.domain.user.dto.request.UserLoginRequest;
 import com.chil.ticketingservice.domain.user.dto.response.UserCreateResponse;
 import com.chil.ticketingservice.domain.user.dto.response.UserLoginResponse;
-import com.chil.ticketingservice.domain.user.repository.UserRepository;
 import com.chil.ticketingservice.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
     // 회원가입
     @PostMapping("/users")

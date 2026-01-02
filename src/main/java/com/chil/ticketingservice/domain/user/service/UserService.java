@@ -27,32 +27,32 @@ public class UserService {
     // 회원가입
     public UserCreateResponse createUser(UserCreateRequest request) {
 
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.email())) {
             throw new CustomException(ExceptionCode.EXISTS_EMAIL);
         }
 
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        String encodedPassword = passwordEncoder.encode(request.password());
 
         User user = new User(
-                request.getEmail(),
-                request.getUsername(),
-                request.getBirth(),
+                request.email(),
+                request.username(),
+                request.birth(),
                 encodedPassword,
                 UserRole.USER
         );
 
         User savedUser = userRepository.save(user);
 
-        return UserCreateResponse.from(savedUser);
+        return new UserCreateResponse(savedUser.getId());
     }
 
     // 로그인
     public UserLoginResponse login(UserLoginRequest request) {
 
-        User user = userRepository.findByEmail(request.getEmail())
+        User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new CustomException(ExceptionCode.LOGIN_FAILED));
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new CustomException(ExceptionCode.LOGIN_FAILED);
         }
 
