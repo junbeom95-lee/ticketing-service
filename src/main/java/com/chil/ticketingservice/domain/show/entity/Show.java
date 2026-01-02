@@ -2,6 +2,7 @@ package com.chil.ticketingservice.domain.show.entity;
 
 import com.chil.ticketingservice.common.dto.CommonResponse;
 import com.chil.ticketingservice.common.entity.BaseEntity;
+import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -41,22 +42,11 @@ public class Show extends BaseEntity {
     @Column
     private String imageUrl;
 
-    public Show(
-            String title,
-            String location,
-            LocalDateTime showDate,
-            Long ageRating,
-            String description
-    ) {
-        this.title = title;
-        this.location = location;
-        this.showDate = showDate;
-        this.ageRating = ageRating;
-        this.description = description;
-    }
-
-    // 공연 삭제 메서드
-    public void showDelete(Long id) {
-        this.id = id;
+    public Show(ShowCreateRequest request) {
+        this.title = request.title();
+        this.location = request.location();
+        this.showDate = request.showDate();
+        this.ageRating = request.ageRating();
+        this.description = request.description();
     }
 }
