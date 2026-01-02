@@ -3,7 +3,8 @@ package com.chil.ticketingservice.domain.booking.service;
 import com.chil.ticketingservice.common.enums.ExceptionCode;
 import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest;
-import com.chil.ticketingservice.domain.booking.dto.response.BookingResponse;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingCancelResponse;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingCreateResponse;
 import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
 import com.chil.ticketingservice.domain.price.entity.Price;
@@ -28,7 +29,7 @@ public class BookingService {
     private final UserRepository userRepository;
 
     @Transactional
-    public BookingResponse createBooking(Long userId, BookingCreateRequest request) {
+    public BookingCreateResponse createBooking(Long userId, BookingCreateRequest request) {
         // 1. 사용자 조회 - userId로 사용자 존재 확인
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
@@ -56,11 +57,11 @@ public class BookingService {
         Booking booking = Booking.createBooking(user, show, request.seat(), request.price());
         Booking savedBooking = bookingRepository.save(booking);
 
-        return BookingResponse.from(savedBooking);
+        return BookingCreateResponse.from(savedBooking);
     }
 
     @Transactional
-    public BookingResponse cancelBooking(Long userId, Long bookingId) {
+    public BookingCancelResponse cancelBooking(Long userId, Long bookingId) {
         // 1. 예매 조회
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.BOOKING_NOT_FOUND));
@@ -78,7 +79,7 @@ public class BookingService {
         // 4. 예매 취소 처리
         booking.cancelBooking();
 
-        return BookingResponse.from(booking);
+        return BookingCancelResponse.from(booking);
     }
 
 
