@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    // findByShowIdAndSeat: 좌석 중복 확인용 메서드
-    Optional<Booking> findByShowIdAndSeat(Long showId, String seat);
+    // findByShowIdAndSeatAndIsCanceledFalse: 취소되지 않은 예매의 좌석 중복 확인용 메서드
+    Optional<Booking> findByShowIdAndSeatAndIsCanceledFalse(Long showId, String seat);
 }

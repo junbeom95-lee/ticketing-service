@@ -37,8 +37,8 @@ public class BookingService {
         Show show = showRepository.findById(request.showId())
                 .orElseThrow(() -> new CustomException(ExceptionCode.SHOW_NOT_FOUND));
 
-        // 3. 좌석 중복 확인 - 해당 공연의 동일 좌석 예매 여부 검증
-        bookingRepository.findByShowIdAndSeat(request.showId(), request.seat())
+        // 3. 좌석 중복 확인 - 해당 공연의 동일 좌석 중 취소되지 않은 예매 여부 검증
+        bookingRepository.findByShowIdAndSeatAndIsCanceledFalse(request.showId(), request.seat())
                 .ifPresent(booking -> {
                     throw new CustomException(ExceptionCode.SEAT_ALREADY_BOOKED);
                 });
@@ -75,4 +75,6 @@ public class BookingService {
 
         return BookingResponse.from(booking);
     }
+
+
 }
