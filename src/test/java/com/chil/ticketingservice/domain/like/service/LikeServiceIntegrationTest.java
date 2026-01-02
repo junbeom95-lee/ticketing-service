@@ -5,6 +5,7 @@ import static com.chil.ticketingservice.common.enums.SuccessMessage.LIKE_DELETE_
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.chil.ticketingservice.common.enums.SuccessMessage;
+import com.chil.ticketingservice.domain.like.dto.response.LikeCountResponse;
 import com.chil.ticketingservice.domain.like.entity.Like;
 import com.chil.ticketingservice.domain.like.repository.LikeRepository;
 import com.chil.ticketingservice.domain.show.entity.Show;
@@ -43,7 +44,7 @@ class LikeServiceIntegrationTest {
     @BeforeEach
     void setUp() {
 
-        user = new User("test@test.com", "test", LocalDate.now(), "1234", UserRole.USER);
+        user = new User("fortest@test.com", "test", LocalDate.now(), "1234", UserRole.USER);
         userRepository.save(user);
 
         show = new Show("test title", "DDP", LocalDateTime.now().plusDays(3), 15L, "descriptions", 1L);
@@ -78,5 +79,21 @@ class LikeServiceIntegrationTest {
         // Then
         assertThat(response).isNotNull();
         assertThat(response).isEqualTo(LIKE_DELETE_SUCCESS);
+    }
+
+    @Test
+    @DisplayName("좋아요 개수 조회 성공")
+    void countLike_success() {
+
+        // Given
+        Like like1 = new Like(show, user);
+        likeRepository.save(like1);
+
+        // When
+        LikeCountResponse response = likeService.countLikes(show.getId());
+
+        // Then
+        assertThat(response).isNotNull();
+        assertThat(response.likes()).isEqualTo(1);
     }
 }
