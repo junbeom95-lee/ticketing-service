@@ -30,8 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
         String method = request.getMethod();
 
-        return uri.equals("/auth/login")
-                || (uri.equals("/users") && method.equals("POST"));
+        return uri.equals("/auth/login") || (uri.equals("/users") && method.equals("POST"));
     }
 
     @Override
@@ -57,8 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
         Long userId = jwtUtil.extractId(jwt);
         UserRole role = jwtUtil.extractRole(jwt);
 
-        List<GrantedAuthority> authorities =
-                List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(userId, null, authorities);
 
