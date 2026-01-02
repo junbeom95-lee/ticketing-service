@@ -5,6 +5,7 @@ import com.chil.ticketingservice.common.enums.SuccessMessage;
 import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCancelResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCreateResponse;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingDetailResponse;
 import com.chil.ticketingservice.domain.booking.service.BookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +42,16 @@ public class BookingController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.success(SuccessMessage.BOOKING_CANCEL_SUCCESS, response));
+    }
+
+    @GetMapping("/{bookingId}")
+    public ResponseEntity<CommonResponse<BookingDetailResponse>> getBookingDetail(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long bookingId
+    ) {
+        BookingDetailResponse response = bookingService.getBookingDetail(userId, bookingId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.success(SuccessMessage.BOOKING_GET_SUCCESS, response));
     }
 }
