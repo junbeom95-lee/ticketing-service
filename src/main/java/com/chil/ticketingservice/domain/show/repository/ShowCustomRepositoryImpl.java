@@ -20,7 +20,7 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
 
     // 공연 리스트 페이지 query dsl
     @Override
-    public Page<ShowResponse> ShowSearch(Pageable pageable) {
+    public Page<ShowResponse> showSearch(Pageable pageable) {
         List<ShowResponse> showResponseList = jpaQueryFactory
                 .select(Projections.constructor(
                         ShowResponse.class,
