@@ -10,6 +10,7 @@ public enum SuccessMessage {
     USER_GET_SUCCESS("회원 조회 성공"),
 
     BOOKING_CREATE_SUCCESS("예매 성공"),
+    BOOKING_CANCEL_SUCCESS("예매 취소 성공"),
 
     ;
 

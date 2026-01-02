@@ -26,7 +26,7 @@ public class Booking extends BaseEntity {
     @JoinColumn(name = "show_id", nullable = false)
     private Show show;
 
-    @Column(length = 20, nullable = false, unique = true)
+    @Column(length = 20, nullable = false)
     private String seat;
 
     @Column(nullable = false)
@@ -47,5 +47,9 @@ public class Booking extends BaseEntity {
         booking.paymentStatus = false;
         booking.isCanceled = false;
         return booking;
+    }
+
+    public void cancelBooking() {
+        this.isCanceled = true;
     }
 }

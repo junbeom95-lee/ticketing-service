@@ -1,4 +1,4 @@
-package com.chil.ticketingservice.domain.booking.dto.req;
+package com.chil.ticketingservice.domain.booking.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

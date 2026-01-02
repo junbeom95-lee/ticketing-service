@@ -2,8 +2,9 @@ package com.chil.ticketingservice.domain.booking.service;
 
 import com.chil.ticketingservice.common.enums.ExceptionCode;
 import com.chil.ticketingservice.common.exception.CustomException;
-import com.chil.ticketingservice.domain.booking.dto.req.BookingCreateRequest;
-import com.chil.ticketingservice.domain.booking.dto.res.BookingResponse;
+import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingCancelResponse;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingCreateResponse;
 import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
 import com.chil.ticketingservice.domain.price.entity.Price;
@@ -28,7 +29,7 @@ public class BookingService {
     private final UserRepository userRepository;
 
     @Transactional
-    public BookingResponse createBooking(Long userId, BookingCreateRequest request) {
+    public BookingCreateResponse createBooking(Long userId, BookingCreateRequest request) {
         // 1. 사용자 조회 - userId로 사용자 존재 확인
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
@@ -37,8 +38,8 @@ public class BookingService {
         Show show = showRepository.findById(request.showId())
                 .orElseThrow(() -> new CustomException(ExceptionCode.SHOW_NOT_FOUND));
 
-        // 3. 좌석 중복 확인 - 해당 공연의 동일 좌석 예매 여부 검증
-        bookingRepository.findByShowIdAndSeat(request.showId(), request.seat())
+        // 3. 좌석 중복 확인 - 해당 공연의 동일 좌석 중 취소되지 않은 예매 여부 검증
+        bookingRepository.findByShowIdAndSeatAndIsCanceledFalse(request.showId(), request.seat())
                 .ifPresent(booking -> {
                     throw new CustomException(ExceptionCode.SEAT_ALREADY_BOOKED);
                 });
@@ -56,6 +57,30 @@ public class BookingService {
         Booking booking = Booking.createBooking(user, show, request.seat(), request.price());
         Booking savedBooking = bookingRepository.save(booking);
 
-        return BookingResponse.from(savedBooking);
+        return BookingCreateResponse.from(savedBooking);
     }
+
+    @Transactional
+    public BookingCancelResponse cancelBooking(Long userId, Long bookingId) {
+        // 1. 예매 조회
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new CustomException(ExceptionCode.BOOKING_NOT_FOUND));
+
+        // 2. 예매 소유자 확인 - 본인의 예매만 취소 가능
+        if (!booking.getUser().getId().equals(userId)) {
+            throw new CustomException(ExceptionCode.ACCESS_DENIED);
+        }
+
+        // 3. 이미 취소된 예매인지 확인
+        if (booking.getIsCanceled()) {
+            throw new CustomException(ExceptionCode.BOOKING_ALREADY_CANCELED);
+        }
+
+        // 4. 예매 취소 처리
+        booking.cancelBooking();
+
+        return BookingCancelResponse.from(booking);
+    }
+
+
 }
