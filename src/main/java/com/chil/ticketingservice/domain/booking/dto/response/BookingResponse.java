@@ -1,4 +1,4 @@
-package com.chil.ticketingservice.domain.booking.dto.res;
+package com.chil.ticketingservice.domain.booking.dto.response;
 
 import com.chil.ticketingservice.domain.booking.entity.Booking;
 
@@ -10,7 +10,7 @@ public record BookingResponse(
         Long userId,
         String seat,
         Boolean paymentStatus,
-        LocalDateTime createAt
+        LocalDateTime isCanceled
 ) {
     public static BookingResponse from(Booking booking) {
         return new BookingResponse(
@@ -19,7 +19,7 @@ public record BookingResponse(
                 booking.getUser().getId(),
                 booking.getSeat(),
                 booking.getPaymentStatus(),
-                booking.getCreatedAt()
+                booking.getIsCanceled() ? booking.getModifiedAt() : null
         );
     }
 }
