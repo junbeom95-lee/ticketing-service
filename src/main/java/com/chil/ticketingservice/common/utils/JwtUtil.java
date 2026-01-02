@@ -16,7 +16,6 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
-@Getter
 public class JwtUtil {
 
     public static final String BEARER_PREFIX = "Bearer ";
