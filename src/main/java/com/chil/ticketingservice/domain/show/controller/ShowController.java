@@ -3,10 +3,8 @@ package com.chil.ticketingservice.domain.show.controller;
 import com.chil.ticketingservice.common.dto.CommonResponse;
 import com.chil.ticketingservice.common.enums.SuccessMessage;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
-import com.chil.ticketingservice.domain.price.dto.request.ShowSeatPriceRegRequest;
 import com.chil.ticketingservice.domain.show.dto.response.ShowCreateResponse;
 import com.chil.ticketingservice.domain.show.dto.response.ShowResponse;
-import com.chil.ticketingservice.domain.price.dto.response.ShowSeatPriceRegResponse;
 import com.chil.ticketingservice.domain.show.service.ShowService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/shows")
@@ -28,19 +25,17 @@ public class ShowController {
     // 공연 생성 요청/검증 메서드
     @PostMapping
     public ResponseEntity<CommonResponse<ShowCreateResponse>> createShow(
-            @Valid
-            @RequestBody ShowCreateRequest request
+            @AuthenticationPrincipal Long creatorId,
+            @Valid @RequestBody ShowCreateRequest request
     ) {
-        ShowCreateResponse result = showService.createShow(request);
+        ShowCreateResponse result = showService.createShow(creatorId, request);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(
-                        CommonResponse.success(
-                                SuccessMessage.SHOW_CREATE_SUCCESS,
-                                result
-                        )
-                );
+                .body(CommonResponse.success(
+                        SuccessMessage.SHOW_CREATE_SUCCESS,
+                        result
+                ));
     }
 
     // 공역 삭제 요청/검증 메서드

@@ -37,7 +37,7 @@ public class Show extends BaseEntity {
     private String description;
 
     @Column(nullable = false)
-    private Long creator = 1L; // 관리자의 ROLE 을 가지고 있는 애들이 들어가야 하기 때문에 USER 병합 전 상수 처리
+    private Long creator;
 
     @Column
     private String imageUrl;
@@ -48,5 +48,10 @@ public class Show extends BaseEntity {
         this.showDate = request.showDate();
         this.ageRating = request.ageRating();
         this.description = request.description();
+    }
+
+    // 관리자 고유 번호 주입 메서드
+    public void creatorId (Long creator) {
+        this.creator = creator;
     }
 }

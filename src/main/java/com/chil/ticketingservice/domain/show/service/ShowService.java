@@ -23,8 +23,10 @@ public class ShowService {
 
     // 공연 생성 비지니스 처리 로직 메서드
     @Transactional
-    public ShowCreateResponse createShow(ShowCreateRequest request) {
+    public ShowCreateResponse createShow(Long creatorId, ShowCreateRequest request) {
         Show show = new Show(request);
+
+        show.creatorId(creatorId);
 
         Show showSave = showRepository.save(show);
 
