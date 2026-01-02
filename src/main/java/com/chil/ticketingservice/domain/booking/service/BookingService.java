@@ -2,8 +2,8 @@ package com.chil.ticketingservice.domain.booking.service;
 
 import com.chil.ticketingservice.common.enums.ExceptionCode;
 import com.chil.ticketingservice.common.exception.CustomException;
-import com.chil.ticketingservice.domain.booking.dto.req.BookingCreateRequest;
-import com.chil.ticketingservice.domain.booking.dto.res.BookingResponse;
+import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingResponse;
 import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
 import com.chil.ticketingservice.domain.price.entity.Price;
@@ -57,5 +57,22 @@ public class BookingService {
         Booking savedBooking = bookingRepository.save(booking);
 
         return BookingResponse.from(savedBooking);
+    }
+
+    @Transactional
+    public BookingResponse cancelBooking(Long bookingId) {
+        // 1. 예매 조회
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new CustomException(ExceptionCode.BOOKING_NOT_FOUND));
+
+        // 2. 이미 취소된 예매인지 확인
+        if (booking.getIsCanceled()) {
+            throw new CustomException(ExceptionCode.BOOKING_ALREADY_CANCELED);
+        }
+
+        // 3. 예매 취소 처리
+        booking.cancelBooking();
+
+        return BookingResponse.from(booking);
     }
 }

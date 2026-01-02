@@ -48,4 +48,8 @@ public class Booking extends BaseEntity {
         booking.isCanceled = false;
         return booking;
     }
+
+    public void cancelBooking() {
+        this.isCanceled = true;
+    }
 }
