@@ -5,13 +5,11 @@ import com.chil.ticketingservice.domain.price.enums.SeatTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
-public class ShowSeatPriceRegResponse {
-
-    private final Long showId;
-    private final SeatTypeEnum seatType;
-    private final Integer price;
+public record ShowSeatPriceRegResponse(
+    Long showId,
+    SeatTypeEnum seatType,
+    int price
+) {
 
     public static ShowSeatPriceRegResponse from(Price seatPrice) {
         return new ShowSeatPriceRegResponse(

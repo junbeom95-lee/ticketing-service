@@ -6,16 +6,14 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Getter
-@AllArgsConstructor
-public class ShowResponse {
-
-    private final Long showId;
-    private final String title;
-    private final String location;
-    private final LocalDateTime showDate;
-    private final String imageUrl;
-    private final Long likes;
+public record ShowResponse(
+    Long showId,
+    String title,
+    String location,
+    LocalDateTime showDate,
+    String imageUrl,
+    Long likes
+) {
 
     public static ShowResponse from(Show show) {
         return new ShowResponse(

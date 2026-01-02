@@ -6,18 +6,16 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Getter
-@AllArgsConstructor
-public class ShowCreateResponse {
-
-    private final Long id;
-    private final String title;
-    private final String location;
-    private final LocalDateTime showDate;
-    private final Long ageRating;
-    private final String description;
-    private final String imageUrl;
-    private final LocalDateTime createdAt;
+public record ShowCreateResponse(
+    Long id,
+    String title,
+    String location,
+    LocalDateTime showDate,
+    Long ageRating,
+    String description,
+    String imageUrl,
+    LocalDateTime createdAt
+) {
 
     public static ShowCreateResponse from(Show show) {
         return new ShowCreateResponse(

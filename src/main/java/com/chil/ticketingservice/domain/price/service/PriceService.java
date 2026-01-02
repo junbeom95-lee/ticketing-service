@@ -28,18 +28,18 @@ public class PriceService {
     ) {
         Show show = showRepository.findShowById(showId);
 
-        SeatTypeEnum seatType = SeatTypeEnum.of(request.getSeatType());
+        SeatTypeEnum seatType = SeatTypeEnum.of(request.seatType());
 
         boolean existsSeatPrice = priceRepository.existsByShow_IdAndSeatType(showId, seatType);
 
         if (existsSeatPrice) {
-            throw new CustomException(ExceptionCode.SEAT_ALREADY_EXISTS);
+            throw new CustomException(ExceptionCode.SHOW_SEAT_DUPLICATED);
         }
 
         Price price = new Price(
                 show,
                 seatType,
-                request.getPrice()
+                request.price()
         );
 
         Price priceSeatSave = priceRepository.save(price);

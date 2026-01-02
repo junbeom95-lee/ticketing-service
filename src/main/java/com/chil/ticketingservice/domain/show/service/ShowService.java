@@ -23,11 +23,11 @@ public class ShowService {
     @Transactional
     public ShowCreateResponse createShow(ShowCreateRequest request) {
         Show show = new Show(
-                request.getTitle(),
-                request.getLocation(),
-                request.getShowDate(),
-                request.getAgeRating(),
-                request.getDescription()
+                request.title(),
+                request.location(),
+                request.showDate(),
+                request.ageRating(),
+                request.description()
         );
 
         Show showSave = showRepository.save(show);

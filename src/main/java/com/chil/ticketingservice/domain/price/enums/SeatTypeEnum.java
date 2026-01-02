@@ -17,7 +17,7 @@ public enum SeatTypeEnum {
                 .filter(s -> s.name().equalsIgnoreCase(value))
                 .findFirst()
                 .orElseThrow(
-                        () -> new CustomException(ExceptionCode.INVALID_SEAT_TYPE)
+                        () -> new CustomException(ExceptionCode.SHOW_INVALID_SEAT_TYPE)
                 );
     }
 }
