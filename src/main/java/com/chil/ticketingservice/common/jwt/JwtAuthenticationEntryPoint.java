@@ -1,6 +1,5 @@
 package com.chil.ticketingservice.common.jwt;
 
-import ch.qos.logback.core.spi.ErrorCodes;
 import com.chil.ticketingservice.common.dto.CommonResponse;
 import com.chil.ticketingservice.common.enums.ExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
