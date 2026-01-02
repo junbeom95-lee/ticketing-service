@@ -4,6 +4,7 @@ import static com.chil.ticketingservice.common.enums.SuccessMessage.LIKE_DELETE_
 import static com.chil.ticketingservice.common.enums.SuccessMessage.LIKE_CREATE_SUCCESS;
 
 import com.chil.ticketingservice.common.enums.SuccessMessage;
+import com.chil.ticketingservice.domain.like.dto.response.LikeCountResponse;
 import com.chil.ticketingservice.domain.like.entity.Like;
 import com.chil.ticketingservice.domain.like.repository.LikeRepository;
 import com.chil.ticketingservice.domain.show.entity.Show;
@@ -51,5 +52,16 @@ public class LikeService {
         likeRepository.save(like);
 
         return LIKE_CREATE_SUCCESS;
+    }
+
+    @Transactional(readOnly = true)
+    public LikeCountResponse countLikes(long showId) {
+
+        Show show = showRepository.findById(showId)
+            .orElseThrow(() -> new RuntimeException("Show Not Found"));
+
+        long likes = likeRepository.countByShow(show);
+
+        return new LikeCountResponse(likes);
     }
 }

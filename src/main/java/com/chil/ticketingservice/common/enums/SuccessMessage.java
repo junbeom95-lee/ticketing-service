@@ -12,8 +12,9 @@ public enum SuccessMessage {
     BOOKING_CREATE_SUCCESS("예매 성공"),
     BOOKING_CANCEL_SUCCESS("예매 취소 성공"),
 
-    LIKE_CREATE_SUCCESS("좋아요 생성 성공"),
-    LIKE_DELETE_SUCCESS("좋아요 삭제 성공"),
+    LIKE_CREATE_SUCCESS("좋아요가 생성되었습니다."),
+    LIKE_DELETE_SUCCESS("좋아요가 삭제되었습니다."),
+    LIKE_COUNT_SUCCESS("좋아요 개수를 조회했습니다."),
     ;
 
     private final String message;
