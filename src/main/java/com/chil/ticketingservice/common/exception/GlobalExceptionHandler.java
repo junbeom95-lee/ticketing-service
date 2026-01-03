@@ -2,7 +2,7 @@ package com.chil.ticketingservice.common.exception;
 
 import com.chil.ticketingservice.common.dto.CommonResponse;
 import com.chil.ticketingservice.common.enums.ExceptionCode;
-import com.chil.ticketingservice.domain.price.enums.SeatTypeEnum;
+import com.chil.ticketingservice.domain.seat.enums.SeatTypeEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
