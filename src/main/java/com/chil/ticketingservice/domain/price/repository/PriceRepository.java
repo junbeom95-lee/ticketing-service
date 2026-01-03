@@ -14,8 +14,6 @@ public interface PriceRepository extends JpaRepository<Price, Long> {
 
     boolean existsByShow_IdAndSeatType(Long showId, SeatTypeEnum seatType);
 
-    List<Price> findByShow_Id(Long showId);
-
     List<Price> findByShow(Show show);
 
     Optional<Price> findByShowAndSeatType(Show show, SeatTypeEnum seatType);
