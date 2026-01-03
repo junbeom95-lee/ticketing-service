@@ -71,12 +71,13 @@ public class BookingController {
                 .body(CommonResponse.success(SuccessMessage.BOOKING_PAYMENT_SUCCESS, response));
     }
 
-    @GetMapping
+    @GetMapping("/users/{userId}")
     public ResponseEntity<CommonResponse<Page<BookingListResponse>>> getUserBookings(
-            @AuthenticationPrincipal Long userId,
+            @AuthenticationPrincipal Long authenticatedUserId,
+            @PathVariable Long userId,
             @PageableDefault(size = 10, sort = "bookingId") Pageable pageable
     ) {
-        Page<BookingListResponse> response = bookingService.getUserBookings(userId, pageable);
+        Page<BookingListResponse> response = bookingService.getUserBookings(authenticatedUserId, userId, pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.success(SuccessMessage.BOOKING_GET_SUCCESS, response));

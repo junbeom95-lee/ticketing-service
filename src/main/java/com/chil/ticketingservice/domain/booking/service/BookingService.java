@@ -131,15 +131,20 @@ public class BookingService {
     }
 
     @Transactional(readOnly = true)
-    public Page<BookingListResponse> getUserBookings(Long userId, Pageable pageable) {
-        // 1. 사용자 존재 확인
+    public Page<BookingListResponse> getUserBookings(Long authenticatedUserId, Long userId, Pageable pageable) {
+        // 1. 본인 확인 - 인증된 사용자만 본인의 예매 조회 가능
+        if (!authenticatedUserId.equals(userId)) {
+            throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
+        }
+
+        // 2. 사용자 존재 확인
         userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
 
-        // 2. 해당 사용자의 모든 예매 조회 (페이징)
+        // 3. 해당 사용자의 모든 예매 조회 (페이징)
         Page<Booking> bookings = bookingRepository.findAllByUser_Id(userId, pageable);
 
-        // 3. DTO 페이지로 변환 (빈 페이지도 정상 응답)
+        // 4. DTO 페이지로 변환 (빈 페이지도 200 OK로 정상 응답)
         return bookings.map(BookingListResponse::from);
     }
 }
