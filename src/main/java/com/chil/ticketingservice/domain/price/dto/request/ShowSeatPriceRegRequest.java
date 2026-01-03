@@ -1,6 +1,6 @@
 package com.chil.ticketingservice.domain.price.dto.request;
 
-import com.chil.ticketingservice.domain.price.enums.SeatTypeEnum;
+import com.chil.ticketingservice.domain.seat.enums.SeatTypeEnum;
 import jakarta.validation.constraints.NotNull;
 
 public record ShowSeatPriceRegRequest(

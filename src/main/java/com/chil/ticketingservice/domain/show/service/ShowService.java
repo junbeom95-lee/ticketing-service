@@ -1,10 +1,10 @@
 package com.chil.ticketingservice.domain.show.service;
 
+import com.chil.ticketingservice.domain.seat.service.SeatService;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
 import com.chil.ticketingservice.domain.show.dto.response.ShowCreateResponse;
 import com.chil.ticketingservice.domain.show.dto.response.ShowResponse;
 import com.chil.ticketingservice.domain.show.entity.Show;
-import com.chil.ticketingservice.domain.price.repository.PriceRepository;
 import com.chil.ticketingservice.domain.show.repository.ShowRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,7 @@ import java.util.List;
 public class ShowService {
 
     private final ShowRepository showRepository;
-    private final PriceRepository seatPriceRepository;
+    private final SeatService seatService;
 
     // 공연 생성 비지니스 처리 로직 메서드
     @Transactional
@@ -27,6 +27,8 @@ public class ShowService {
         Show show = new Show(request);
 
         Show showSave = showRepository.save(show);
+
+        seatService.createSeat(showSave);
 
         return ShowCreateResponse.from(showSave);
     }

@@ -5,7 +5,7 @@ import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.price.dto.request.ShowSeatPriceRegRequest;
 import com.chil.ticketingservice.domain.price.dto.response.ShowSeatPriceRegResponse;
 import com.chil.ticketingservice.domain.price.entity.Price;
-import com.chil.ticketingservice.domain.price.enums.SeatTypeEnum;
+import com.chil.ticketingservice.domain.seat.enums.SeatTypeEnum;
 import com.chil.ticketingservice.domain.price.repository.PriceRepository;
 import com.chil.ticketingservice.domain.show.entity.Show;
 import com.chil.ticketingservice.domain.show.repository.ShowRepository;

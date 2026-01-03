@@ -1,4 +1,4 @@
-package com.chil.ticketingservice.domain.price.enums;
+package com.chil.ticketingservice.domain.seat.enums;
 
 import lombok.Getter;
 
