@@ -27,10 +27,10 @@ public class SeatService {
 
         List<Seat> seatList = new ArrayList<>();
 
-        seatList.addAll(createSeatList(show, SeatTypeEnum.VIP, 100));
-        seatList.addAll(createSeatList(show, SeatTypeEnum.S, 500));
-        seatList.addAll(createSeatList(show, SeatTypeEnum.A, 1000));
-        seatList.addAll(createSeatList(show, SeatTypeEnum.B, 1000));
+        seatList.addAll(createSeatList(show, SeatTypeEnum.VIP));
+        seatList.addAll(createSeatList(show, SeatTypeEnum.S));
+        seatList.addAll(createSeatList(show, SeatTypeEnum.A));
+        seatList.addAll(createSeatList(show, SeatTypeEnum.B));
 
         seatRepository.saveAll(seatList);
     }
@@ -54,11 +54,11 @@ public class SeatService {
     }
 
     //특정 show 좌석 리스트 생성
-    private List<Seat> createSeatList(Show show, SeatTypeEnum seatType, int count) {
+    private List<Seat> createSeatList(Show show, SeatTypeEnum seatType) {
 
         List<Seat> seatList = new ArrayList<>();
 
-        for (int i = 1; i <= count; i++) {
+        for (int i = 1; i <= seatType.getSize(); i++) {
             Seat seat = new Seat(show, seatType, i);
             seatList.add(seat);
         }

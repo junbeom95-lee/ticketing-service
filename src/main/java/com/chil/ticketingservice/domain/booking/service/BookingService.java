@@ -10,6 +10,8 @@ import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
 import com.chil.ticketingservice.domain.price.entity.Price;
 import com.chil.ticketingservice.domain.price.repository.PriceRepository;
+import com.chil.ticketingservice.domain.seat.dto.SeatCode;
+import com.chil.ticketingservice.domain.seat.repository.SeatRepository;
 import com.chil.ticketingservice.domain.show.entity.Show;
 import com.chil.ticketingservice.domain.show.repository.ShowRepository;
 import com.chil.ticketingservice.domain.user.entity.User;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +30,7 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final ShowRepository showRepository;
     private final PriceRepository priceRepository;
+    private final SeatRepository seatRepository;
     private final UserRepository userRepository;
 
     @Transactional
@@ -39,11 +43,9 @@ public class BookingService {
         Show show = showRepository.findById(request.showId())
                 .orElseThrow(() -> new CustomException(ExceptionCode.SHOW_NOT_FOUND));
 
-        // 3. 좌석 중복 확인 - 해당 공연의 동일 좌석 중 취소되지 않은 예매 여부 검증
-        bookingRepository.findByShowIdAndSeatAndIsCanceledFalse(request.showId(), request.seat())
-                .ifPresent(booking -> {
-                    throw new CustomException(ExceptionCode.SEAT_ALREADY_BOOKED);
-                });
+        // 3. 좌석 중복 확인 - 해당 공연의 좌석이 예매 가능인지 확인
+        SeatCode seatCode = new SeatCode(request.seat());
+        seatRepository.checkSeatAvailable(show, seatCode.getSeatTypeEnum(), seatCode.getSeatNumber());
 
         // 4. 가격 검증 - 요청한 가격이 해당 공연의 유효한 가격인지 확인
         List<Price> prices = priceRepository.findByShow_Id(request.showId());

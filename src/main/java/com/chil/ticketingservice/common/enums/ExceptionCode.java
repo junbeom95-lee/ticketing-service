@@ -20,6 +20,8 @@ public enum ExceptionCode {
 
 
     //좌석 금액
+    SEAT_BAD_REQUEST(HttpStatus.BAD_REQUEST, "올바르지 않은 좌석입니다."),
+    SEAT_NOT_FOUND(HttpStatus.NOT_FOUND, "좌석이 존재하지 않습니다."),
 
 
     //좋아요

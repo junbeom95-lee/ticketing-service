@@ -1,5 +1,7 @@
 package com.chil.ticketingservice.domain.seat.repository;
 
+import com.chil.ticketingservice.common.enums.ExceptionCode;
+import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.seat.dto.response.SeatAvailableResponse;
 import com.chil.ticketingservice.domain.seat.dto.response.SeatAvailableTypeResponse;
 import com.chil.ticketingservice.domain.seat.entity.Seat;
@@ -10,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SeatRepository extends JpaRepository<Seat, Long> {
 
@@ -32,4 +35,17 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
         group by s.seatType
         """)
     List<SeatAvailableTypeResponse> countByShow(@Param("show") Show show);
+
+
+    Optional<Seat> findByShowAndSeatTypeAndSeatNumber(Show show, SeatTypeEnum seatType, Integer seatNumber);
+
+    //좌석 예매 가능 확인
+    default void checkSeatAvailable(Show show, SeatTypeEnum seatType, Integer seatNumber) {
+        Seat seat = findByShowAndSeatTypeAndSeatNumber(show, seatType, seatNumber).orElseThrow(
+                () -> new CustomException(ExceptionCode.SEAT_NOT_FOUND));
+
+        if (!seat.getSeatStatus()) {
+            throw new CustomException(ExceptionCode.SEAT_ALREADY_BOOKED);
+        }
+    }
 }
