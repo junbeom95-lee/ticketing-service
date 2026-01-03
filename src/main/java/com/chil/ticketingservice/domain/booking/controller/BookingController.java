@@ -6,6 +6,7 @@ import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCancelResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCreateResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingDetailResponse;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingPaymentResponse;
 import com.chil.ticketingservice.domain.booking.service.BookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,5 +54,16 @@ public class BookingController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.success(SuccessMessage.BOOKING_GET_SUCCESS, response));
+    }
+
+    @PostMapping("/{bookingId}/payment")
+    public ResponseEntity<CommonResponse<BookingPaymentResponse>> processPayment(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long bookingId
+    ) {
+        BookingPaymentResponse response = bookingService.processPayment(userId, bookingId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.success(SuccessMessage.BOOKING_PAYMENT_SUCCESS, response));
     }
 }
