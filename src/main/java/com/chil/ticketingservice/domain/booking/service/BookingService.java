@@ -70,7 +70,7 @@ public class BookingService {
                 .orElseThrow(() -> new CustomException(ExceptionCode.BOOKING_NOT_FOUND));
 
         // 2. 예매 소유자 확인 - 본인의 예매만 취소 가능
-        if (!booking.getUser().getId().equals(userId)) {
+        if (!Objects.equals(booking.getUser().getId(), userId)) {
             throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
         }
 
@@ -92,7 +92,7 @@ public class BookingService {
                 .orElseThrow(() -> new CustomException(ExceptionCode.BOOKING_NOT_FOUND));
 
         // 2. 본인 예매인지 검증
-        if (!booking.getUser().getId().equals(userId)) {
+        if (!Objects.equals(booking.getUser().getId(), userId)) {
             throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
         }
 
@@ -107,7 +107,7 @@ public class BookingService {
                 .orElseThrow(() -> new CustomException(ExceptionCode.BOOKING_NOT_FOUND));
 
         // 2. 예매 소유자 확인 - 본인의 예매만 결제 가능
-        if (!booking.getUser().getId().equals(userId)) {
+        if (!Objects.equals(booking.getUser().getId(), userId)) {
             throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
         }
 
