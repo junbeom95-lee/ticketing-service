@@ -2,6 +2,7 @@ package com.chil.ticketingservice.domain.seat.repository;
 
 import com.chil.ticketingservice.common.enums.ExceptionCode;
 import com.chil.ticketingservice.common.exception.CustomException;
+import com.chil.ticketingservice.domain.seat.dto.SeatCode;
 import com.chil.ticketingservice.domain.seat.dto.response.SeatAvailableResponse;
 import com.chil.ticketingservice.domain.seat.dto.response.SeatAvailableTypeResponse;
 import com.chil.ticketingservice.domain.seat.entity.Seat;
@@ -40,12 +41,11 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
     Optional<Seat> findByShowAndSeatTypeAndSeatNumber(Show show, SeatTypeEnum seatType, Integer seatNumber);
 
     //좌석 예매 가능 확인
-    default void checkSeatAvailable(Show show, SeatTypeEnum seatType, Integer seatNumber) {
-        Seat seat = findByShowAndSeatTypeAndSeatNumber(show, seatType, seatNumber).orElseThrow(
-                () -> new CustomException(ExceptionCode.SEAT_NOT_FOUND));
+    default Seat findSeatBySeatCode(Show show, String seatString) {
 
-        if (!seat.getSeatStatus()) {
-            throw new CustomException(ExceptionCode.SEAT_ALREADY_BOOKED);
-        }
+        SeatCode seatCode = new SeatCode(seatString);
+
+        return findByShowAndSeatTypeAndSeatNumber(show, seatCode.getSeatTypeEnum(), seatCode.getSeatNumber())
+                .orElseThrow( () -> new CustomException(ExceptionCode.SEAT_NOT_FOUND));
     }
 }

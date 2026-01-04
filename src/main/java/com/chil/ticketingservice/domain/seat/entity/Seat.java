@@ -45,4 +45,8 @@ public class Seat {
         this.seatNumber = seatNumber;
         this.seatStatus = true;
     }
+
+    public void availableSeat() {
+        this.seatStatus = true;
+    }
 }

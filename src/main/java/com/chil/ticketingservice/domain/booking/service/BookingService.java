@@ -10,7 +10,7 @@ import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
 import com.chil.ticketingservice.domain.price.entity.Price;
 import com.chil.ticketingservice.domain.price.repository.PriceRepository;
-import com.chil.ticketingservice.domain.seat.dto.SeatCode;
+import com.chil.ticketingservice.domain.seat.entity.Seat;
 import com.chil.ticketingservice.domain.seat.repository.SeatRepository;
 import com.chil.ticketingservice.domain.show.entity.Show;
 import com.chil.ticketingservice.domain.show.repository.ShowRepository;
@@ -20,8 +20,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,8 +44,10 @@ public class BookingService {
                 .orElseThrow(() -> new CustomException(ExceptionCode.SHOW_NOT_FOUND));
 
         // 3. 좌석 중복 확인 - 해당 공연의 좌석이 예매 가능인지 확인
-        SeatCode seatCode = new SeatCode(request.seat());
-        seatRepository.checkSeatAvailable(show, seatCode.getSeatTypeEnum(), seatCode.getSeatNumber());
+        Seat seat = seatRepository.findSeatBySeatCode(show, request.seat());
+        if (!seat.getSeatStatus()) {
+            throw new CustomException(ExceptionCode.SEAT_ALREADY_BOOKED);
+        }
 
         // 4. 가격 검증 - 요청한 가격이 해당 공연의 유효한 가격인지 확인
         List<Price> prices = priceRepository.findByShow_Id(request.showId());
@@ -69,18 +71,28 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.BOOKING_NOT_FOUND));
 
-        // 2. 예매 소유자 확인 - 본인의 예매만 취소 가능
+        // 2. 끝난 공연인지 확인
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(booking.getShow().getShowDate())) {
+            throw new CustomException(ExceptionCode.BOOKING_CANNOT_CANCEL_AFTER_SHOW);
+        }
+
+        // 3. 예매 소유자 확인 - 본인의 예매만 취소 가능
         if (!booking.getUser().getId().equals(userId)) {
             throw new CustomException(ExceptionCode.ACCESS_DENIED);
         }
 
-        // 3. 이미 취소된 예매인지 확인
+        // 4. 이미 취소된 예매인지 확인
         if (booking.getIsCanceled()) {
             throw new CustomException(ExceptionCode.BOOKING_ALREADY_CANCELED);
         }
 
-        // 4. 예매 취소 처리
+        // 5. 예매 취소 처리
         booking.cancelBooking();
+
+        // 6. 예매 가능한 좌석으로 변경
+        Seat seat = seatRepository.findSeatBySeatCode(booking.getShow(), booking.getSeat());
+        seat.availableSeat();
 
         return BookingCancelResponse.from(booking);
     }
