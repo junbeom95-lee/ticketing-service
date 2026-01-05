@@ -45,6 +45,12 @@ public class BookingService {
         Show show = showRepository.findById(request.showId())
                 .orElseThrow(() -> new CustomException(ExceptionCode.SHOW_NOT_FOUND));
 
+        //3. 해당 공연 일시를 확인 - 공연이 지나면 예매 불가능
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(show.getShowDate())) {
+            throw new CustomException(ExceptionCode.BOOKING_CANNOT_AFTER_SHOW);
+        }
+
         // 3. 좌석 중복 확인 - 해당 공연의 좌석이 예매 가능인지 확인
         Seat seat = seatRepository.findSeatBySeatCode(show, request.seat());
         if (!seat.getSeatStatus()) {

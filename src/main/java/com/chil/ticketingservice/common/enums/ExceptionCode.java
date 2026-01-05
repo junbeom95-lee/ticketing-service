@@ -38,6 +38,7 @@ public enum ExceptionCode {
     BOOKING_ACCESS_DENIED(HttpStatus.FORBIDDEN, "해당 예매에 대한 접근 권한이 없습니다."),
     BOOKING_ALREADY_PAID(HttpStatus.BAD_REQUEST, "이미 결제된 예매입니다."),
     BOOKING_CANCELED_CANNOT_PAY(HttpStatus.BAD_REQUEST, "취소된 예매는 결제할 수 없습니다."),
+    BOOKING_CANNOT_AFTER_SHOW(HttpStatus.BAD_REQUEST, "이미 종료된 공연을 예매 할 수 없습니다."),
     BOOKING_CANNOT_CANCEL_AFTER_SHOW(HttpStatus.BAD_REQUEST, "이미 종료된 공연의 예매는 취소할 수 없습니다."),
 
 
