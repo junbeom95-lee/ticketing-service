@@ -48,8 +48,8 @@ public class BookingService {
                 });
 
         // 4. 가격 검증 - 요청한 가격이 해당 공연의 유효한 가격인지 확인
-        List<Price> prices = priceRepository.findByShow_Id(request.showId());
-        boolean isPriceValid = prices.stream()
+        List<Price> priceList = priceRepository.findByShow(show);
+        boolean isPriceValid = priceList.stream()
                 .anyMatch(price -> price.getPrice().equals(request.price()));
 
         if (!isPriceValid) {

@@ -20,7 +20,7 @@ public enum ExceptionCode {
 
 
     //좌석 금액
-
+    PRICE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 좌석 금액입니다."),
 
     //좋아요
 
