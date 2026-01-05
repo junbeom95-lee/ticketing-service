@@ -1,5 +1,6 @@
 package com.chil.ticketingservice.domain.booking.service;
 
+import com.chil.ticketingservice.common.annotation.RedisLock;
 import com.chil.ticketingservice.common.enums.ExceptionCode;
 import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest;
@@ -38,6 +39,7 @@ public class BookingService {
     private final SeatRepository seatRepository;
     private final UserRepository userRepository;
 
+    @RedisLock
     @Transactional
     public BookingCreateResponse createBooking(Long userId, BookingCreateRequest request) {
         // 1. 사용자 조회 - userId로 사용자 존재 확인
