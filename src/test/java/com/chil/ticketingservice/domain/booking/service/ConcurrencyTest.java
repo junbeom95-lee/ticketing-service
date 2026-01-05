@@ -24,6 +24,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,9 @@ class ConcurrencyTest {
         showRepository.save(show);
 
         Seat seat = new Seat(show, SeatTypeEnum.A, 1);
+        Seat seat2 = new Seat(show, SeatTypeEnum.A, 2);
         seatRepository.save(seat);
+        seatRepository.save(seat2);
 
         Price price = new Price(show, SeatTypeEnum.A, 10000);
         priceRepository.save(price);
@@ -123,5 +126,78 @@ class ConcurrencyTest {
         Seat seat = seatRepository.findById(1L).orElseThrow();
         assertThat(seat.getSeatStatus()).isFalse();
         assertThat(bookingRepository.count()).isEqualTo(1);
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("서로 다른 좌석에 대한 병렬 예매 처리 확인")
+    void createBooking_pessimistic_lock_test() throws InterruptedException {
+
+        // Given
+        BookingCreateRequest request1 = new BookingCreateRequest(1L, "A1", 10000);
+        BookingCreateRequest request2 = new BookingCreateRequest(1L, "A2", 10000);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(numUsers*2);
+        CountDownLatch ready = new CountDownLatch(numUsers*2);
+        CountDownLatch start = new CountDownLatch(1);
+        CountDownLatch done = new CountDownLatch(numUsers*2);
+
+        AtomicInteger success = new AtomicInteger();
+        AtomicInteger failure = new AtomicInteger();
+
+        // When
+        for (int i = 1; i <= numUsers; i++) {
+
+            long userId = i;
+
+            executorService.execute(() -> {
+                ready.countDown();
+                try {
+                    start.await();
+                    bookingService.createBooking(userId, request1);
+                    success.incrementAndGet();
+                } catch (Exception e) {
+                    failure.incrementAndGet();
+                } finally {
+                    done.countDown();
+                }
+            });
+        }
+
+        for (int i = numUsers; i >= 1; i--) {
+
+            long userId = i;
+
+            executorService.execute(() -> {
+                ready.countDown();
+                try {
+                    start.await();
+                    bookingService.createBooking(userId, request2);
+                    success.incrementAndGet();
+                } catch (Exception e) {
+                    failure.incrementAndGet();
+                } finally {
+                    done.countDown();
+                }
+            });
+        }
+
+        ready.await();
+        start.countDown();
+        done.await();
+
+        executorService.shutdown();
+
+        // Then
+        assertThat(success.get()).isEqualTo(2);
+        assertThat(failure.get()).isEqualTo(4);
+
+        Seat seat1 = seatRepository.findById(1L).orElseThrow();
+        assertThat(seat1.getSeatStatus()).isFalse();
+
+        Seat seat2 = seatRepository.findById(2L).orElseThrow();
+        assertThat(seat2.getSeatStatus()).isFalse();
+
+        assertThat(bookingRepository.count()).isEqualTo(2);
     }
 }
