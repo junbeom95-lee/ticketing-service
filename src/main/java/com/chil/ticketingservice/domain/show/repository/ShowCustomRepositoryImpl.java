@@ -1,6 +1,8 @@
 package com.chil.ticketingservice.domain.show.repository;
 
+import com.chil.ticketingservice.domain.like.repository.LikeRepository;
 import com.chil.ticketingservice.domain.show.dto.response.ShowResponse;
+import com.chil.ticketingservice.domain.show.entity.Show;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+import static com.chil.ticketingservice.domain.like.entity.QLike.like;
 import static com.chil.ticketingservice.domain.show.entity.QShow.show;
 
 @AllArgsConstructor
@@ -29,9 +32,17 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
                         show.location,
                         show.showDate,
                         show.imageUrl,
-                        Expressions.constant(0L)
+                        like.id.count()
                 ))
                 .from(show)
+                .leftJoin(like).on(like.id.eq(show.id))
+                .groupBy(
+                        show.id,
+                        show.title,
+                        show.location,
+                        show.showDate,
+                        show.imageUrl
+                )
                 .orderBy(show.showDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -42,10 +53,6 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
                 .from(show)
                 .fetchOne();
 
-        if (total == null) {
-            total = 0L;
-        }
-
-        return new PageImpl<>(showResponseList, pageable, total);
+        return new PageImpl<>(showResponseList, pageable, total == null ? 0L : total );
     }
 }
