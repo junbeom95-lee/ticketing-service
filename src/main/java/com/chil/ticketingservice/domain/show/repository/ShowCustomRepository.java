@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface ShowCustomRepository {
 
-    Page<ShowResponse> showSearch(Pageable pageable);
+    Page<ShowResponse> showSearch(String keyword, Pageable pageable);
 }
