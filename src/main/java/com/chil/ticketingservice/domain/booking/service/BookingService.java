@@ -1,11 +1,13 @@
 package com.chil.ticketingservice.domain.booking.service;
 
+import com.chil.ticketingservice.common.annotation.RedisLock;
 import com.chil.ticketingservice.common.enums.ExceptionCode;
 import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCancelResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCreateResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingDetailResponse;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingListResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingPaymentResponse;
 import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
@@ -18,6 +20,8 @@ import com.chil.ticketingservice.domain.show.repository.ShowRepository;
 import com.chil.ticketingservice.domain.user.entity.User;
 import com.chil.ticketingservice.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +39,7 @@ public class BookingService {
     private final SeatRepository seatRepository;
     private final UserRepository userRepository;
 
+    @RedisLock
     @Transactional
     public BookingCreateResponse createBooking(Long userId, BookingCreateRequest request) {
         // 1. 사용자 조회 - userId로 사용자 존재 확인
@@ -146,5 +151,19 @@ public class BookingService {
         booking.processPayment();
 
         return BookingPaymentResponse.from(booking);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<BookingListResponse> getUserBookings(Long authenticatedUserId, Long userId, Pageable pageable) {
+        // 1. 본인 확인 - 인증된 사용자만 본인의 예매 조회 가능
+        if (!Objects.equals(authenticatedUserId, userId)) {
+            throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
+        }
+
+        // 2. 해당 사용자의 모든 예매 조회 (페이징)
+        Page<Booking> bookings = bookingRepository.findAllByUser_Id(userId, pageable);
+
+        // 3. DTO 페이지로 변환 (빈 페이지도 200 OK로 정상 응답)
+        return bookings.map(BookingListResponse::from);
     }
 }
