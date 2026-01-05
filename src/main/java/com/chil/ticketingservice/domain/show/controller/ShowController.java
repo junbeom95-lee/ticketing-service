@@ -46,7 +46,7 @@ public class ShowController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(CommonResponse.successNodata(SuccessMessage.SHOW_RESPONSE_SUCCESS));
+                .body(CommonResponse.successNodata(SuccessMessage.SHOW_DELETE_SUCCESS));
     }
 
     // 공연 조회 리스트 요청/검증 메서드
