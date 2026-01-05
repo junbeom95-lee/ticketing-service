@@ -1,6 +1,5 @@
 package com.chil.ticketingservice.domain.show.entity;
 
-import com.chil.ticketingservice.common.dto.CommonResponse;
 import com.chil.ticketingservice.common.entity.BaseEntity;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
 import jakarta.persistence.*;
@@ -45,5 +44,6 @@ public class Show extends BaseEntity {
         this.showDate = request.showDate();
         this.ageRating = request.ageRating();
         this.description = request.description();
+        this.imageUrl = request.imageUrl();
     }
 }
