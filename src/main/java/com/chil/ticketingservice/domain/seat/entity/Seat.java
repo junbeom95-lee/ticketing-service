@@ -49,4 +49,8 @@ public class Seat {
     public void availableSeat() {
         this.seatStatus = true;
     }
+
+    public void bookSeat() {
+        this.seatStatus = false;
+    }
 }

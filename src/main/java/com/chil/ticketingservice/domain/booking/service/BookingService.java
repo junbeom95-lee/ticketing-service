@@ -63,6 +63,7 @@ public class BookingService {
         // 5. 예매 생성 - 모든 검증 통과 시 예매 생성 및 저장
         Booking booking = Booking.createBooking(user, show, request.seat(), request.price());
         Booking savedBooking = bookingRepository.save(booking);
+        seat.bookSeat();
 
         return BookingCreateResponse.from(savedBooking);
     }
