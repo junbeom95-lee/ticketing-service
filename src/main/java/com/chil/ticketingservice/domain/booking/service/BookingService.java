@@ -154,7 +154,7 @@ public class BookingService {
     @Transactional(readOnly = true)
     public Page<BookingListResponse> getUserBookings(Long authenticatedUserId, Long userId, Pageable pageable) {
         // 1. 본인 확인 - 인증된 사용자만 본인의 예매 조회 가능
-        if (!authenticatedUserId.equals(userId)) {
+        if (!Objects.equals(authenticatedUserId, userId)) {
             throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
         }
 
