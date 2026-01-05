@@ -158,14 +158,10 @@ public class BookingService {
             throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
         }
 
-        // 2. 사용자 존재 확인
-        userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ExceptionCode.USER_NOT_FOUND));
-
-        // 3. 해당 사용자의 모든 예매 조회 (페이징)
+        // 2. 해당 사용자의 모든 예매 조회 (페이징)
         Page<Booking> bookings = bookingRepository.findAllByUser_Id(userId, pageable);
 
-        // 4. DTO 페이지로 변환 (빈 페이지도 200 OK로 정상 응답)
+        // 3. DTO 페이지로 변환 (빈 페이지도 200 OK로 정상 응답)
         return bookings.map(BookingListResponse::from);
     }
 }
