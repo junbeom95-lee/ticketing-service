@@ -6,6 +6,7 @@ import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCancelResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCreateResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingDetailResponse;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingPaymentResponse;
 import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
 import com.chil.ticketingservice.domain.price.entity.Price;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -50,8 +52,8 @@ public class BookingService {
         }
 
         // 4. 가격 검증 - 요청한 가격이 해당 공연의 유효한 가격인지 확인
-        List<Price> prices = priceRepository.findByShow_Id(request.showId());
-        boolean isPriceValid = prices.stream()
+        List<Price> priceList = priceRepository.findByShow(show);
+        boolean isPriceValid = priceList.stream()
                 .anyMatch(price -> price.getPrice().equals(request.price()));
 
         if (!isPriceValid) {
@@ -78,9 +80,8 @@ public class BookingService {
         }
 
         // 3. 예매 소유자 확인 - 본인의 예매만 취소 가능
-        if (!booking.getUser().getId().equals(userId)) {
-            throw new CustomException(ExceptionCode.ACCESS_DENIED);
-        }
+        if (!Objects.equals(booking.getUser().getId(), userId)) {
+            throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
 
         // 4. 이미 취소된 예매인지 확인
         if (booking.getIsCanceled()) {
@@ -104,11 +105,38 @@ public class BookingService {
                 .orElseThrow(() -> new CustomException(ExceptionCode.BOOKING_NOT_FOUND));
 
         // 2. 본인 예매인지 검증
-        if (!booking.getUser().getId().equals(userId)) {
+        if (!Objects.equals(booking.getUser().getId(), userId)) {
             throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
         }
 
         // 3. DTO 변환
         return BookingDetailResponse.from(booking);
+    }
+
+    @Transactional
+    public BookingPaymentResponse processPayment(Long userId, Long bookingId) {
+        // 1. 예매 조회
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new CustomException(ExceptionCode.BOOKING_NOT_FOUND));
+
+        // 2. 예매 소유자 확인 - 본인의 예매만 결제 가능
+        if (!Objects.equals(booking.getUser().getId(), userId)) {
+            throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
+        }
+
+        // 3. 이미 결제된 예매인지 확인
+        if (booking.getPaymentStatus()) {
+            throw new CustomException(ExceptionCode.BOOKING_ALREADY_PAID);
+        }
+
+        // 4. 취소된 예매인지 확인
+        if (booking.getIsCanceled()) {
+            throw new CustomException(ExceptionCode.BOOKING_CANCELED_CANNOT_PAY);
+        }
+
+        // 5. 결제 처리
+        booking.processPayment();
+
+        return BookingPaymentResponse.from(booking);
     }
 }
