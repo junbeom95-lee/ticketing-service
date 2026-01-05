@@ -49,6 +49,8 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
                 // 공연 임박순
                 // 오늘 날짜 기준 1주일 이내의 공연만 출력
 
+                orderSpecifier = show.showDate.desc(); // 기본값
+
                 LocalDateTime start = LocalDate.now().atStartOfDay();
                 LocalDateTime end = LocalDate.now().plusDays(7).atTime(23, 59, 59);
 
@@ -59,7 +61,7 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
             case "bestseller" : // 판매 많은 순
                 joinBooking = true;
 
-                orderSpecifier = booking.show.id.count().desc();
+                orderSpecifier = booking.countDistinct().desc();
 
                 break;
 
@@ -77,7 +79,7 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
                         show.location,
                         show.showDate,
                         show.imageUrl,
-                        like.id.count()
+                        like.countDistinct()
                 ))
                 .from(show)
                 .leftJoin(like).on(like.show.id.eq(show.id));
