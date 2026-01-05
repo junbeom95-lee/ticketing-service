@@ -1,5 +1,6 @@
 package com.chil.ticketingservice.domain.show.service;
 
+import com.chil.ticketingservice.domain.like.repository.LikeRepository;
 import com.chil.ticketingservice.domain.seat.service.SeatService;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
 import com.chil.ticketingservice.domain.show.dto.response.ShowCreateResponse;
@@ -20,6 +21,7 @@ public class ShowService {
 
     private final ShowRepository showRepository;
     private final SeatService seatService;
+    private final LikeRepository likeRepository;
 
     // 공연 생성 비지니스 처리 로직 메서드
     @Transactional
@@ -43,8 +45,8 @@ public class ShowService {
 
     // 공연 조회 리스트 비지니스 로직 처리 메서드
     @Transactional(readOnly = true)
-    public Page<ShowResponse> showList(Pageable pageable) {
-        return showRepository.showSearch(pageable);
+    public Page<ShowResponse> showList(String keyword, Pageable pageable) {
+        return showRepository.showSearch(keyword, pageable);
     }
 
     // 공연 상세 조회 비지니스 로직 처리 메서드
@@ -52,6 +54,8 @@ public class ShowService {
     public ShowResponse showDetail(Long showId) {
         Show show = showRepository.findShowById(showId);
 
-        return ShowResponse.from(show);
+        long likeCnt = likeRepository.countByShow(show);
+
+        return ShowResponse.from(show, likeCnt);
     }
 }
