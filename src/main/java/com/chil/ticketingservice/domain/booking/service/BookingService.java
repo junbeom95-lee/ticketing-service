@@ -82,6 +82,7 @@ public class BookingService {
         // 3. 예매 소유자 확인 - 본인의 예매만 취소 가능
         if (!Objects.equals(booking.getUser().getId(), userId)) {
             throw new CustomException(ExceptionCode.BOOKING_ACCESS_DENIED);
+        }
 
         // 4. 이미 취소된 예매인지 확인
         if (booking.getIsCanceled()) {
