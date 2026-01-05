@@ -39,14 +39,14 @@ public class ShowController {
 
     // 공역 삭제 요청/검증 메서드
     @DeleteMapping("/{showId}")
-    public ResponseEntity<Void> deleteShow(
+    public ResponseEntity<CommonResponse<Void>> deleteShow(
             @PathVariable Long showId
     ) {
         showService.showDelete(showId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .build();
+                .body(CommonResponse.successNodata(SuccessMessage.SHOW_RESPONSE_SUCCESS));
     }
 
     // 공연 조회 리스트 요청/검증 메서드

@@ -48,4 +48,6 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
         return findByShowAndSeatTypeAndSeatNumber(show, seatCode.getSeatTypeEnum(), seatCode.getSeatNumber())
                 .orElseThrow( () -> new CustomException(ExceptionCode.SEAT_NOT_FOUND));
     }
+
+    void deleteByShowId(Long showId);
 }
