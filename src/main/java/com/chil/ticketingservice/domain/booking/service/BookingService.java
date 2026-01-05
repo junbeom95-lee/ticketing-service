@@ -45,19 +45,19 @@ public class BookingService {
         Show show = showRepository.findById(request.showId())
                 .orElseThrow(() -> new CustomException(ExceptionCode.SHOW_NOT_FOUND));
 
-        //3. 해당 공연 일시를 확인 - 공연이 지나면 예매 불가능
+        // 3. 해당 공연 일시를 확인 - 공연이 지나면 예매 불가능
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(show.getShowDate())) {
             throw new CustomException(ExceptionCode.BOOKING_CANNOT_AFTER_SHOW);
         }
 
-        // 3. 좌석 중복 확인 - 해당 공연의 좌석이 예매 가능인지 확인
+        // 4. 좌석 중복 확인 - 해당 공연의 좌석이 예매 가능인지 확인
         Seat seat = seatRepository.findSeatBySeatCode(show, request.seat());
         if (!seat.getSeatStatus()) {
             throw new CustomException(ExceptionCode.SEAT_ALREADY_BOOKED);
         }
 
-        // 4. 가격 검증 - 요청한 가격이 해당 공연의 유효한 가격인지 확인
+        // 5. 가격 검증 - 요청한 가격이 해당 공연의 유효한 가격인지 확인
         List<Price> priceList = priceRepository.findByShow(show);
         boolean isPriceValid = priceList.stream()
                 .anyMatch(price -> price.getPrice().equals(request.price()));
@@ -66,7 +66,7 @@ public class BookingService {
             throw new CustomException(ExceptionCode.BOOKING_PRICE_MISMATCH);
         }
 
-        // 5. 예매 생성 - 모든 검증 통과 시 예매 생성 및 저장
+        // 6. 예매 생성 - 모든 검증 통과 시 예매 생성 및 저장
         Booking booking = Booking.createBooking(user, show, request.seat(), request.price());
         Booking savedBooking = bookingRepository.save(booking);
         seat.bookSeat();
