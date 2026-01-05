@@ -6,10 +6,15 @@ import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCancelResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCreateResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingDetailResponse;
+import com.chil.ticketingservice.domain.booking.dto.response.BookingListResponse;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingPaymentResponse;
 import com.chil.ticketingservice.domain.booking.service.BookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -65,5 +70,17 @@ public class BookingController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.success(SuccessMessage.BOOKING_PAYMENT_SUCCESS, response));
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<CommonResponse<Page<BookingListResponse>>> getUserBookings(
+            @AuthenticationPrincipal Long authenticatedUserId,
+            @PathVariable Long userId,
+            @PageableDefault(size = 10, sort = "bookingId", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<BookingListResponse> response = bookingService.getUserBookings(authenticatedUserId, userId, pageable);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(CommonResponse.success(SuccessMessage.BOOKING_GET_SUCCESS, response));
     }
 }

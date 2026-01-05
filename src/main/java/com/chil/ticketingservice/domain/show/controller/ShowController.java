@@ -11,9 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/shows")
@@ -23,11 +24,12 @@ public class ShowController {
     private final ShowService showService;
 
     // 공연 생성 요청/검증 메서드
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CommonResponse<ShowCreateResponse>> createShow(
-            @Valid @RequestBody ShowCreateRequest request
+            @RequestPart("request") @Valid ShowCreateRequest request,
+            @RequestPart("image") MultipartFile image
     ) {
-        ShowCreateResponse result = showService.createShow(request);
+        ShowCreateResponse result = showService.createShow(request, image);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -50,11 +52,16 @@ public class ShowController {
     }
 
     // 공연 조회 리스트 요청/검증 메서드
+    // 최신순: latest
+    // 공연 임박순: upcoming
+    // 판매 많은순: bestseller
+    // 인기순: popular
     @GetMapping
     public ResponseEntity<CommonResponse<Page<ShowResponse>>> showList(
+            @RequestParam(defaultValue = "latest") String keyword,
             Pageable pageable
     ) {
-        Page<ShowResponse> result = showService.showList(pageable);
+        Page<ShowResponse> result = showService.showList(keyword, pageable);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
