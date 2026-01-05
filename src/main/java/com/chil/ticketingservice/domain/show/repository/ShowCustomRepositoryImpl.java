@@ -1,6 +1,7 @@
 package com.chil.ticketingservice.domain.show.repository;
 
 import com.chil.ticketingservice.domain.like.repository.LikeRepository;
+import com.chil.ticketingservice.domain.search.dto.request.SearchCreateRequest;
 import com.chil.ticketingservice.domain.show.dto.response.ShowResponse;
 import com.chil.ticketingservice.domain.show.entity.Show;
 import com.querydsl.core.BooleanBuilder;
@@ -108,5 +109,50 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
                 .fetchOne();
 
         return new PageImpl<>(showResponseList, pageable, total == null ? 0L : total );
+    }
+
+    @Override
+    public Page<ShowResponse> totalSearch(SearchCreateRequest request, Pageable pageable) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        String searchData = request.searchData() == null ? null : request.searchData();
+
+        // 빈값 이었을때 조건
+        if (searchData != null || !searchData.isBlank()) {
+            builder.and(show.title.contains(searchData));
+        }
+
+        List<ShowResponse> searchList = jpaQueryFactory
+                .select(Projections.constructor(
+                                ShowResponse.class,
+                                show.id,
+                                show.title,
+                                show.location,
+                                show.showDate,
+                                show.imageUrl,
+                                like.countDistinct()
+                        )
+                )
+                .from(show)
+                .leftJoin(like).on(like.show.id.eq(show.id))
+                .where(builder)
+                .groupBy(
+                        show.id,
+                        show.title,
+                        show.location,
+                        show.showDate,
+                        show.imageUrl
+                )
+                .orderBy(show.showDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = jpaQueryFactory
+                .select(show.count())
+                .from(show)
+                .fetchOne();
+
+        return new PageImpl<>(searchList, pageable, total == null ? 0L : total );
     }
 }
