@@ -50,11 +50,16 @@ public class ShowController {
     }
 
     // 공연 조회 리스트 요청/검증 메서드
+    // 최신순: latest
+    // 공연 임박순: upcoming
+    // 판매 많은순: bestseller
+    // 인기순: popular
     @GetMapping
     public ResponseEntity<CommonResponse<Page<ShowResponse>>> showList(
+            @RequestParam(defaultValue = "latest") String keyword,
             Pageable pageable
     ) {
-        Page<ShowResponse> result = showService.showList(pageable);
+        Page<ShowResponse> result = showService.showList(keyword, pageable);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
