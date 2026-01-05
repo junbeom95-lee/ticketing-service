@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,7 +76,7 @@ public class BookingController {
     public ResponseEntity<CommonResponse<Page<BookingListResponse>>> getUserBookings(
             @AuthenticationPrincipal Long authenticatedUserId,
             @PathVariable Long userId,
-            @PageableDefault(size = 10, sort = "bookingId") Pageable pageable
+            @PageableDefault(size = 10, sort = "bookingId", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         Page<BookingListResponse> response = bookingService.getUserBookings(authenticatedUserId, userId, pageable);
         return ResponseEntity
