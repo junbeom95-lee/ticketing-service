@@ -1,6 +1,7 @@
 package com.chil.ticketingservice.domain.booking.controller;
 
 import com.chil.ticketingservice.common.dto.CommonResponse;
+import com.chil.ticketingservice.common.dto.PageResponse;
 import com.chil.ticketingservice.common.enums.SuccessMessage;
 import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest;
 import com.chil.ticketingservice.domain.booking.dto.response.BookingCancelResponse;
@@ -72,12 +73,13 @@ public class BookingController {
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<CommonResponse<Page<BookingListResponse>>> getUserBookings(
+    public ResponseEntity<CommonResponse<PageResponse<BookingListResponse>>> getUserBookings(
             @AuthenticationPrincipal Long authenticatedUserId,
             @PathVariable Long userId,
             @PageableDefault(size = 10, sort = "bookingId") Pageable pageable
     ) {
-        Page<BookingListResponse> response = bookingService.getUserBookings(authenticatedUserId, userId, pageable);
+        Page<BookingListResponse> page = bookingService.getUserBookings(authenticatedUserId, userId, pageable);
+        PageResponse<BookingListResponse> response = PageResponse.from(page);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.success(SuccessMessage.BOOKING_GET_SUCCESS, response));
