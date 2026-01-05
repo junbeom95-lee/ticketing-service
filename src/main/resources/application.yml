@@ -17,3 +17,7 @@ spring:
         jdbc:
           batch_size: 1000
     show-sql: true
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
