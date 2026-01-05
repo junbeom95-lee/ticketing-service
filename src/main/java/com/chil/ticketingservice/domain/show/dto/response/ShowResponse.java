@@ -13,14 +13,14 @@ public record ShowResponse(
     Long likes
 ) {
 
-    public static ShowResponse from(Show show) {
+    public static ShowResponse from(Show show, long likeCnt) {
         return new ShowResponse(
                 show.getId(),
                 show.getTitle(),
                 show.getLocation(),
                 show.getShowDate(),
                 show.getImageUrl(),
-                0L
+                likeCnt
         );
     }
 }
