@@ -1,6 +1,9 @@
 package com.chil.ticketingservice.common.aspect;
 
+import static com.chil.ticketingservice.common.enums.ExceptionCode.SEAT_ALREADY_BOOKED;
+
 import com.chil.ticketingservice.common.annotation.RedisLock;
+import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +43,7 @@ public class RedissonLockAspect {
 
             if (!lockAcquired) {
                 log.warn("[RedissonLock] 락 획득 실패 - lockKey: {}", lockKey);
-                throw new IllegalStateException("락 획득 실패 - lockKey: " + lockKey);
+                throw new CustomException(SEAT_ALREADY_BOOKED);
             }
 
             log.info("[RedissonLock] 락 획득 성공 - lockKey: {}", lockKey);
