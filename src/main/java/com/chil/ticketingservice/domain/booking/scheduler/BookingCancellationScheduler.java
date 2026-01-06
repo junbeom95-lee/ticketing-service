@@ -24,16 +24,8 @@ public class BookingCancellationScheduler {
     @Transactional
     public void cancelBooking () {
 
-        LocalDateTime expired = LocalDateTime.now().minusMinutes(10);
+        int cancelledBookings = bookingRepository.cancelExpiredBookings();
 
-        List<Booking> bookingList = bookingRepository.findExpiredBookings(expired);
-
-        bookingList.forEach(booking -> {
-            booking.cancelBooking();
-            Seat seat = seatRepository.findSeatBySeatCode(booking.getShow(), booking.getSeat());
-            seat.availableSeat();
-        });
-
-        log.info("{} - 결제 시간 초과로 {}건의 예매 취소 처리", expired, bookingList.size());
+        log.info("{} - 만료 처리된 예매/좌석 row 수: {}", LocalDateTime.now(), cancelledBookings);
     }
 }
