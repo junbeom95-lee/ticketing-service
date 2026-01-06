@@ -1,6 +1,7 @@
 package com.chil.ticketingservice.domain.show.service;
 
 import com.chil.ticketingservice.domain.like.repository.LikeRepository;
+import com.chil.ticketingservice.domain.price.repository.PriceRepository;
 import com.chil.ticketingservice.domain.seat.repository.SeatRepository;
 import com.chil.ticketingservice.domain.seat.service.SeatService;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
@@ -22,6 +23,7 @@ public class ShowService {
     private final ShowRepository showRepository;
     private final SeatService seatService;
     private final SeatRepository seatRepository;
+    private final PriceRepository priceRepository;
     private final LikeRepository likeRepository;
     private final S3Service s3Service;
 
@@ -53,9 +55,11 @@ public class ShowService {
     @Transactional
     public void showDelete(Long showId) {
 
-        seatRepository.deleteByShowId(showId);
-
         showRepository.findShowById(showId);
+
+        priceRepository.deleteByShowId(showId);
+
+        seatRepository.deleteByShowId(showId);
 
         showRepository.deleteById(showId);
     }

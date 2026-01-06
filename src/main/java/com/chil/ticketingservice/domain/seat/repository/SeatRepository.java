@@ -37,6 +37,7 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
         """)
     List<SeatAvailableTypeResponse> countByShow(@Param("show") Show show);
 
+    void deleteByShowId(Long showId);
 
     Optional<Seat> findByShowAndSeatTypeAndSeatNumber(Show show, SeatTypeEnum seatType, Integer seatNumber);
 
@@ -48,6 +49,4 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
         return findByShowAndSeatTypeAndSeatNumber(show, seatCode.getSeatTypeEnum(), seatCode.getSeatNumber())
                 .orElseThrow( () -> new CustomException(ExceptionCode.SEAT_NOT_FOUND));
     }
-
-    void deleteByShowId(Long showId);
 }
