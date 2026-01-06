@@ -31,9 +31,11 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Test (H2) + Coverage Gate
+        uses: gradle/gradle-build-action@v2
         env:
           SPRING_PROFILES_ACTIVE: test
-        run: ./gradlew clean test jacocoTestCoverageVerification --stacktrace
+        with:
+          arguments: clean test jacocoTestCoverageVerification
 
       - name: Build bootJar
         uses: gradle/gradle-build-action@v2
