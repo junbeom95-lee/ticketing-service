@@ -10,10 +10,4 @@ public record ShowSearchRequest(
 
     String keyword
 ) {
-    public ShowSearchRequest withDefaultKeyword() {
-        return new ShowSearchRequest(
-                showTitle,
-                (keyword == null || keyword.isBlank()) ? "latest" : keyword
-        );
-    }
 }

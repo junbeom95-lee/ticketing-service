@@ -5,7 +5,6 @@ import com.chil.ticketingservice.domain.show.dto.response.ShowResponse;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
@@ -33,47 +32,46 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
     public Page<ShowResponse> showSearch(ShowSearchRequest request, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
 
-        OrderSpecifier<?> orderSpecifier = null;
-        boolean joinBooking = false;
+        // 제목 조건
         String title = request.showTitle();
-
         if (title != null && !title.isBlank()) {
             builder.and(show.title.contains(title));
         }
 
-        switch (request.keyword()) {
-            case "latest" :
-                // 최신순
-                orderSpecifier = show.showDate.desc(); // 기본값
+        // keyword 기본값 보장
+        String keyword = request.keyword();
+        if (keyword == null || keyword.isBlank()) {
+            keyword = "latest";
+        }
 
-                break;
+        // 기본 정렬
+        OrderSpecifier<?> order = show.showDate.desc();
+        boolean needBookingJoin = false;
 
-            case "upcoming" :
-                // 공연 임박순
-                // 오늘 날짜 기준 1주일 이내의 공연만 출력
-
-                orderSpecifier = show.showDate.desc(); // 기본값
-
+        // 4. keyword 분기
+        switch (keyword) {
+            case "upcoming" -> {
                 LocalDateTime start = LocalDate.now().atStartOfDay();
                 LocalDateTime end = LocalDate.now().plusDays(7).atTime(23, 59, 59);
 
                 builder.and(show.showDate.between(start, end));
+            }
 
-                break;
+            case "bestseller" -> {
+                needBookingJoin = true;
+                order = booking.countDistinct().desc();
+            }
 
-            case "bestseller" : // 판매 많은 순
-                joinBooking = true;
+            case "popular" -> {
+                order = like.show.id.count().desc();
+            }
 
-                orderSpecifier = booking.countDistinct().desc();
-
-                break;
-
-            case "popular" : // 인기순
-                orderSpecifier = like.show.id.count().desc();
-
-                break;
+            case "latest" -> {
+                // 기본값 → 아무것도 안 함
+            }
         }
 
+        // 5. Query 생성
         JPAQuery<ShowResponse> query = jpaQueryFactory
                 .select(Projections.constructor(
                         ShowResponse.class,
@@ -87,11 +85,12 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
                 .from(show)
                 .leftJoin(like).on(like.show.id.eq(show.id));
 
-        if (joinBooking) {
+        if (needBookingJoin) {
             query.leftJoin(booking).on(booking.show.id.eq(show.id));
         }
 
-        List<ShowResponse> showResponseList = query
+        // 6. 실행
+        List<ShowResponse> content = query
                 .where(builder)
                 .groupBy(
                         show.id,
@@ -100,7 +99,7 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
                         show.showDate,
                         show.imageUrl
                 )
-                .orderBy(orderSpecifier)
+                .orderBy(order)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -108,8 +107,9 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
         Long total = jpaQueryFactory
                 .select(show.count())
                 .from(show)
+                .where(builder)
                 .fetchOne();
 
-        return new PageImpl<>(showResponseList, pageable, total == null ? 0L : total );
+        return new PageImpl<>(content, pageable, total == null ? 0L : total);
     }
 }

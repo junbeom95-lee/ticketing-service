@@ -5,23 +5,28 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
-@Table(name = "searchs")
+@Table(name = "searchlogs")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Search {
+public class SearchLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "search_id")
     private Long id;
 
-    private String searchData;
+    private String showTitle;
 
     private Long userId;
 
-    public Search(String searchData, Long userId) {
-        this.searchData = searchData;
+    private LocalDateTime searchTime;
+
+    public SearchLog(String showTitle, Long userId, LocalDateTime searchTime) {
+        this.showTitle = showTitle;
         this.userId = userId;
+        this.searchTime = searchTime;
     }
 }

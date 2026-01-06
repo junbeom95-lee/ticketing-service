@@ -1,8 +1,13 @@
 spring:
+
   application:
     name: name=ticketing-service
   config:
     import: optional:file:.env[.properties]
+  data:
+    redis:
+      host: localhost
+      port: ${REDIS_PORT}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL}
@@ -17,3 +22,6 @@ spring:
         jdbc:
           batch_size: 1000
     show-sql: true
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
