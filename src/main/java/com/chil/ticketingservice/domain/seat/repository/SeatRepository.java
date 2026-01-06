@@ -8,7 +8,9 @@ import com.chil.ticketingservice.domain.seat.dto.response.SeatAvailableTypeRespo
 import com.chil.ticketingservice.domain.seat.entity.Seat;
 import com.chil.ticketingservice.domain.seat.enums.SeatTypeEnum;
 import com.chil.ticketingservice.domain.show.entity.Show;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -20,7 +22,7 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
     @Query("""
         select new com.chil.ticketingservice.domain.seat.dto.response.SeatAvailableResponse(concat(s.seatType, s.seatNumber))
         from Seat s
-        where s.show = :show 
+        where s.show = :show
         and s.seatType = :seatType
         and s.seatStatus = true
         """)
@@ -39,6 +41,7 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
 
     void deleteByShowId(Long showId);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Seat> findByShowAndSeatTypeAndSeatNumber(Show show, SeatTypeEnum seatType, Integer seatNumber);
 
     //좌석 예매 가능 확인
