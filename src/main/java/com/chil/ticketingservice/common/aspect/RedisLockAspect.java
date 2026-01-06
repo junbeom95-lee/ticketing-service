@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 @RequiredArgsConstructor
-@Slf4j
+@Slf4j(topic = "RedisLock")
 public class RedisLockAspect {
 
     private final RedisLockService lockService;
@@ -34,15 +34,17 @@ public class RedisLockAspect {
         boolean locked = lockService.tryLock(key, value, 5);
 
         if (!locked) {
-            log.info("락 획득 실패 : {}", Thread.currentThread().getName());
             throw new CustomException(SEAT_ALREADY_BOOKED);
         }
 
+        log.info("락 획득 성공 - lockKey: {}", key);
+
         try {
-            log.info("락 획득 성공 : {}", Thread.currentThread().getName());
             return joinPoint.proceed();
         } finally {
-            lockService.unlock(key, value);
+            if (locked) {
+                lockService.unlock(key, value);
+            }
         }
     }
 }
