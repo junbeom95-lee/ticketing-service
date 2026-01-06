@@ -10,7 +10,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "bookings")
+@Table(name = "bookings",
+    indexes = {
+        @Index(
+            name = "idx_booking_expire",
+            columnList = "payment_status, is_canceled, created_at"
+        )
+    })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Booking extends BaseEntity {
 
