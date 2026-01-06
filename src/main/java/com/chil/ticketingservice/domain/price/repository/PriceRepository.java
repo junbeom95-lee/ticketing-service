@@ -22,4 +22,6 @@ public interface PriceRepository extends JpaRepository<Price, Long> {
         return findByShowAndSeatType(show, seatType).orElseThrow(
                 () -> new CustomException(ExceptionCode.PRICE_NOT_FOUND));
     }
+
+    void deleteByShowId(Long showId);
 }
