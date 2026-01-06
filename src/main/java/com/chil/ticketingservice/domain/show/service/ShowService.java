@@ -1,5 +1,6 @@
 package com.chil.ticketingservice.domain.show.service;
 
+import com.chil.ticketingservice.domain.booking.service.BookingService;
 import com.chil.ticketingservice.domain.like.repository.LikeRepository;
 import com.chil.ticketingservice.domain.price.repository.PriceRepository;
 import com.chil.ticketingservice.domain.seat.repository.SeatRepository;
@@ -25,6 +26,7 @@ public class ShowService {
     private final SeatRepository seatRepository;
     private final PriceRepository priceRepository;
     private final LikeRepository likeRepository;
+    private final BookingService bookingService;
     private final S3Service s3Service;
 
     // 공연 생성 비지니스 처리 로직 메서드
@@ -55,11 +57,13 @@ public class ShowService {
     @Transactional
     public void showDelete(Long showId) {
 
-        showRepository.findShowById(showId);
+        Show show = showRepository.findShowById(showId);
 
         priceRepository.deleteByShowId(showId);
 
         seatRepository.deleteByShowId(showId);
+
+        bookingService.deleteShowCancelBooking(show);
 
         showRepository.deleteById(showId);
     }
