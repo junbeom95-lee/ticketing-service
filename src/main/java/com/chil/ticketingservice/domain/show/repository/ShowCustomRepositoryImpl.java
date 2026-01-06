@@ -44,15 +44,22 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
             keyword = "latest";
         }
 
+        // 기본 조건
+        // 현재 년도 기준 작년 공연은 조회 안됨.
+        LocalDateTime startOfYear = LocalDate.now().withDayOfYear(1).atStartOfDay();
+        builder.and(show.showDate.goe(startOfYear));
+
         // 기본 정렬
-        OrderSpecifier<?> order = show.showDate.desc();
+        OrderSpecifier<?> order = show.showDate.asc();
         boolean needBookingJoin = false;
 
-        // 4. keyword 분기
+        // keyword 분기
         switch (keyword) {
             case "upcoming" -> {
                 LocalDateTime start = LocalDate.now().atStartOfDay();
                 LocalDateTime end = LocalDate.now().plusDays(7).atTime(23, 59, 59);
+
+                order = show.showDate.asc();
 
                 builder.and(show.showDate.between(start, end));
             }
@@ -71,7 +78,7 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
             }
         }
 
-        // 5. Query 생성
+        // Query 생성
         JPAQuery<ShowResponse> query = jpaQueryFactory
                 .select(Projections.constructor(
                         ShowResponse.class,
@@ -89,7 +96,7 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
             query.leftJoin(booking).on(booking.show.id.eq(show.id));
         }
 
-        // 6. 실행
+        // 실행
         List<ShowResponse> content = query
                 .where(builder)
                 .groupBy(
