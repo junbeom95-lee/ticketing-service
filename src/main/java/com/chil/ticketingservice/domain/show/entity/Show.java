@@ -44,5 +44,6 @@ public class Show extends BaseEntity {
         this.showDate = request.showDate();
         this.ageRating = request.ageRating();
         this.description = request.description();
+        this.imageUrl = request.imageUrl();
     }
 }

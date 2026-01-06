@@ -13,9 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,12 +29,15 @@ public class ShowController {
     private final ShowService showService;
 
     // 공연 생성 요청/검증 메서드
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CommonResponse<ShowCreateResponse>> createShow(
             @Valid
-            @RequestBody ShowCreateRequest request
+            @RequestPart("request")
+            ShowCreateRequest request,
+
+            @RequestPart("image") MultipartFile image
     ) {
-        ShowCreateResponse result = showService.createShow(request);
+        ShowCreateResponse result = showService.createShow(request, image);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
