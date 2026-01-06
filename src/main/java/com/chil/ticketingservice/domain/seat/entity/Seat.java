@@ -9,7 +9,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "seats")
+@Table(name = "seats",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_seat_show_id_seat_type_seat_number",
+                        columnNames = {"show_id", "seat_type", "seat_number"}
+                )
+        }
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Seat {
 
