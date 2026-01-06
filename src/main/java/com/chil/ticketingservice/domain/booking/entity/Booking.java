@@ -1,7 +1,6 @@
 package com.chil.ticketingservice.domain.booking.entity;
 
 import com.chil.ticketingservice.common.entity.BaseEntity;
-import com.chil.ticketingservice.domain.show.entity.Show;
 import com.chil.ticketingservice.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -22,9 +21,8 @@ public class Booking extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "show_id", nullable = false)
-    private Show show;
+    @Column(nullable = false)
+    private Long showId;
 
     @Column(length = 20, nullable = false)
     private String seat;
@@ -38,10 +36,10 @@ public class Booking extends BaseEntity {
     @Column(nullable = false)
     private Boolean isCanceled;
 
-    public static Booking createBooking(User user, Show show, String seat, Integer price) {
+    public static Booking createBooking(User user, Long showId, String seat, Integer price) {
         Booking booking = new Booking();
         booking.user = user;
-        booking.show = show;
+        booking.showId = showId;
         booking.seat = seat;
         booking.price = price;
         booking.paymentStatus = false;

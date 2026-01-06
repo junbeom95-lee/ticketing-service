@@ -114,7 +114,6 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
         Long total = jpaQueryFactory
                 .select(show.count())
                 .from(show)
-                .where(builder)
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, total == null ? 0L : total);

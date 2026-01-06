@@ -39,6 +39,8 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
         """)
     List<SeatAvailableTypeResponse> countByShow(@Param("show") Show show);
 
+    void deleteByShowId(Long showId);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Seat> findByShowAndSeatTypeAndSeatNumber(Show show, SeatTypeEnum seatType, Integer seatNumber);
 
