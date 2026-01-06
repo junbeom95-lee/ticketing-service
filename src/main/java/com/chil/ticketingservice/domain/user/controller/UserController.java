@@ -1,7 +1,6 @@
 package com.chil.ticketingservice.domain.user.controller;
 
 import com.chil.ticketingservice.common.dto.CommonResponse;
-import com.chil.ticketingservice.common.enums.SuccessMessage;
 import com.chil.ticketingservice.domain.user.dto.request.UserCreateRequest;
 import com.chil.ticketingservice.domain.user.dto.request.UserLoginRequest;
 import com.chil.ticketingservice.domain.user.dto.response.UserCreateResponse;
