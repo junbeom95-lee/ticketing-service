@@ -33,7 +33,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: clean test bootJar
+          arguments: clean test bootJar jacocoTestCoverageVerification bootJar
 
       - name: Docker image build
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/chill-container .
