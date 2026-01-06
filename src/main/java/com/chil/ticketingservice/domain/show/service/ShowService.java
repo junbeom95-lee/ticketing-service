@@ -3,6 +3,7 @@ package com.chil.ticketingservice.domain.show.service;
 import com.chil.ticketingservice.domain.like.repository.LikeRepository;
 import com.chil.ticketingservice.domain.seat.service.SeatService;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
+import com.chil.ticketingservice.domain.show.dto.request.ShowSearchRequest;
 import com.chil.ticketingservice.domain.show.dto.response.ShowCreateResponse;
 import com.chil.ticketingservice.domain.show.dto.response.ShowResponse;
 import com.chil.ticketingservice.domain.show.entity.Show;
@@ -45,8 +46,8 @@ public class ShowService {
 
     // 공연 조회 리스트 비지니스 로직 처리 메서드
     @Transactional(readOnly = true)
-    public Page<ShowResponse> showList(String keyword, Pageable pageable) {
-        return showRepository.showSearch(keyword, pageable);
+    public Page<ShowResponse> showList(ShowSearchRequest request, Pageable pageable) {
+        return showRepository.showSearch(request, pageable);
     }
 
     // 공연 상세 조회 비지니스 로직 처리 메서드

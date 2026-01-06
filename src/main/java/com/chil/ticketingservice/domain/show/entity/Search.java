@@ -1,6 +1,5 @@
-package com.chil.ticketingservice.domain.search.entity;
+package com.chil.ticketingservice.domain.show.entity;
 
-import com.chil.ticketingservice.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "searchs")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Search extends BaseEntity {
+public class Search {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,6 +3,7 @@ package com.chil.ticketingservice.domain.show.controller;
 import com.chil.ticketingservice.common.dto.CommonResponse;
 import com.chil.ticketingservice.common.enums.SuccessMessage;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
+import com.chil.ticketingservice.domain.show.dto.request.ShowSearchRequest;
 import com.chil.ticketingservice.domain.show.dto.response.ShowCreateResponse;
 import com.chil.ticketingservice.domain.show.dto.response.ShowResponse;
 import com.chil.ticketingservice.domain.show.service.ShowService;
@@ -25,7 +26,8 @@ public class ShowController {
     // 공연 생성 요청/검증 메서드
     @PostMapping
     public ResponseEntity<CommonResponse<ShowCreateResponse>> createShow(
-            @Valid @RequestBody ShowCreateRequest request
+            @Valid
+            @RequestBody ShowCreateRequest request
     ) {
         ShowCreateResponse result = showService.createShow(request);
 
@@ -56,10 +58,15 @@ public class ShowController {
     // 인기순: popular
     @GetMapping
     public ResponseEntity<CommonResponse<Page<ShowResponse>>> showList(
-            @RequestParam(defaultValue = "latest") String keyword,
+            @Valid
+            @ModelAttribute ShowSearchRequest request,
+
             Pageable pageable
     ) {
-        Page<ShowResponse> result = showService.showList(keyword, pageable);
+        // request dto 기본값 설정
+        ShowSearchRequest normalizedRequest = request.withDefaultKeyword();
+
+        Page<ShowResponse> result = showService.showList(normalizedRequest, pageable);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
