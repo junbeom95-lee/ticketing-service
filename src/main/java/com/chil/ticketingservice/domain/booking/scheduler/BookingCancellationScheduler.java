@@ -1,11 +1,7 @@
 package com.chil.ticketingservice.domain.booking.scheduler;
 
-import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
-import com.chil.ticketingservice.domain.seat.entity.Seat;
-import com.chil.ticketingservice.domain.seat.repository.SeatRepository;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,11 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
-@Slf4j
+@Slf4j(topic = "BookingCancellationScheduler")
 public class BookingCancellationScheduler {
 
     private final BookingRepository bookingRepository;
-    private final SeatRepository seatRepository;
 
     @Scheduled(fixedDelay = 60000)
     @Transactional
