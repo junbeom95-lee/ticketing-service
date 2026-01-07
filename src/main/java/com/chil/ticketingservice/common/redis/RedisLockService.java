@@ -39,6 +39,6 @@ public class RedisLockService {
             value
         );
 
-        log.info("획득한 락 키 반납 :::: {}", Thread.currentThread().getName());
+        log.info("획득한 락 키 반납 - lockKey: {}", key);
     }
 }

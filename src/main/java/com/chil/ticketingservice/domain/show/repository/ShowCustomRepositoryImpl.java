@@ -85,7 +85,7 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
                 .leftJoin(like).on(like.show.id.eq(show.id));
 
         if (joinBooking) {
-            query.leftJoin(booking).on(booking.show.id.eq(show.id));
+            query.leftJoin(booking).on(booking.showId.eq(show.id));
         }
 
         List<ShowResponse> showResponseList = query

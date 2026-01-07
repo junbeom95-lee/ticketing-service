@@ -12,7 +12,7 @@ public record BookingListResponse(
     public static BookingListResponse from(Booking booking) {
         return new BookingListResponse(
                 booking.getBookingId(),
-                booking.getShow().getId(),
+                booking.getShowId(),
                 booking.getSeat(),
                 booking.getPaymentStatus(),
                 booking.getIsCanceled()
