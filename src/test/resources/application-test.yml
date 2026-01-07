@@ -17,6 +17,11 @@ spring:
         jdbc:
           batch_size: 1000
     show-sql: true
+  data:
+    redis:
+      host: host
+      port: 0000
+
 
 # 테스트 키
 jwt:
