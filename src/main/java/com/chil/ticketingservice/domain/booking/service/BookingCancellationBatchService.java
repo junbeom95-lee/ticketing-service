@@ -1,7 +1,6 @@
 package com.chil.ticketingservice.domain.booking.service;
 
 import com.chil.ticketingservice.domain.booking.entity.Booking;
-import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
 import com.chil.ticketingservice.domain.seat.entity.Seat;
 import com.chil.ticketingservice.domain.seat.repository.SeatRepository;
 import com.chil.ticketingservice.domain.show.entity.Show;
@@ -15,14 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BookingCancellationBatchService {
 
-    private final BookingRepository bookingRepository;
     private final SeatRepository seatRepository;
     private final ShowRepository showRepository;
 
     @Transactional
-    public void processCancellation(List<Booking> bookings) {
+    public void processCancellation(List<Booking> expiredBookingList) {
 
-        for (Booking booking : bookings) {
+        for (Booking booking : expiredBookingList) {
 
             booking.cancelBooking();
 
@@ -31,8 +29,5 @@ public class BookingCancellationBatchService {
             Seat seat = seatRepository.findSeatBySeatCode(show, booking.getSeat());
             seat.availableSeat();
         }
-
-        bookingRepository.flush();
-        seatRepository.flush();
     }
 }

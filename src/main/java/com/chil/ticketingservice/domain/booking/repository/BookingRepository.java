@@ -23,7 +23,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
         FROM Booking b
         WHERE b.paymentStatus = false
           AND b.isCanceled = false
-          AND b.createdAt <= :expiredAt
+          AND b.createdAt <= :standardTime
         """)
-    Page<Booking> findExpiredBookings(@Param("expiredAt") LocalDateTime expiredAt, Pageable pageable);
+    List<Booking> findExpiredBookings(@Param("standardTime") LocalDateTime standardTime);
 }
