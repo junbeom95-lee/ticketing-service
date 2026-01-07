@@ -21,7 +21,6 @@ import org.springframework.security.web.servletapi.SecurityContextHolderAwareReq
 @RequiredArgsConstructor
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
-@Profile(("!test"))
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
