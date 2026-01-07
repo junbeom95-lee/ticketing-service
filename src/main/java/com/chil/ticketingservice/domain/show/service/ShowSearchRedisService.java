@@ -49,7 +49,7 @@ public class ShowSearchRedisService {
                 long seconds = Duration.between(now, midnight).getSeconds(); // 지금부터 자정까지 몇 초 남았는지 계산
 
                 // 초단위로 계산(TimeUnit.SECONDS)
-                stringRedisTemplate.expire(rankKey, 60, TimeUnit.SECONDS);
+                stringRedisTemplate.expire(rankKey, seconds, TimeUnit.SECONDS);
             }
         } catch (Exception e) {
             log.warn("Redis 검색 로그 저장 실패", e);
