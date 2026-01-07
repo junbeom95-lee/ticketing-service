@@ -1,4 +1,4 @@
-package com.chil.ticketingservice.domain.show.entity;
+package com.chil.ticketingservice.domain.log.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -18,15 +18,15 @@ public class SearchLog {
     @Column(name = "search_id")
     private Long id;
 
-    private String showTitle;
-
     private Long userId;
+
+    private String showTitle;
 
     private LocalDateTime searchTime;
 
-    public SearchLog(String showTitle, Long userId, LocalDateTime searchTime) {
-        this.showTitle = showTitle;
+    public SearchLog(Long userId, String showTitle, LocalDateTime searchTime) {
         this.userId = userId;
+        this.showTitle = showTitle;
         this.searchTime = searchTime;
     }
 }
