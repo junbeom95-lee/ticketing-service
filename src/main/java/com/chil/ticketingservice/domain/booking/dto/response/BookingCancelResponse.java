@@ -13,7 +13,7 @@ public record BookingCancelResponse(
     public static BookingCancelResponse from(Booking booking) {
         return new BookingCancelResponse(
                 booking.getBookingId(),
-                booking.getShow().getId(),
+                booking.getShowId(),
                 booking.getUser().getId(),
                 booking.getSeat(),
                 booking.getPaymentStatus(),

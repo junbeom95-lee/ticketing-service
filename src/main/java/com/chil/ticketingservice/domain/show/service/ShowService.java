@@ -1,8 +1,13 @@
 package com.chil.ticketingservice.domain.show.service;
 
+import com.chil.ticketingservice.domain.booking.service.BookingService;
 import com.chil.ticketingservice.domain.like.repository.LikeRepository;
+import com.chil.ticketingservice.domain.price.repository.PriceRepository;
+import com.chil.ticketingservice.domain.seat.repository.SeatRepository;
 import com.chil.ticketingservice.domain.seat.service.SeatService;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
+import com.chil.ticketingservice.domain.show.dto.request.ShowSearchRequest;
+import com.chil.ticketingservice.domain.show.dto.response.SearchRankResponse;
 import com.chil.ticketingservice.domain.show.dto.response.ShowCreateResponse;
 import com.chil.ticketingservice.domain.show.dto.response.ShowResponse;
 import com.chil.ticketingservice.domain.show.entity.Show;
@@ -14,13 +19,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ShowService {
 
     private final ShowRepository showRepository;
     private final SeatService seatService;
+    private final SeatRepository seatRepository;
+    private final PriceRepository priceRepository;
     private final LikeRepository likeRepository;
+    private final ShowSearchRedisService showSearchRedisService;
+    private final BookingService bookingService;
     private final S3Service s3Service;
 
     // 공연 생성 비지니스 처리 로직 메서드
@@ -53,15 +64,28 @@ public class ShowService {
 
         Show show = showRepository.findShowById(showId);
 
-        s3Service.deleteByUrl(show.getImageUrl());
+        priceRepository.deleteByShowId(showId);
+
+        seatRepository.deleteByShowId(showId);
+
+        bookingService.deleteShowCancelBooking(show);
 
         showRepository.deleteById(showId);
     }
 
     // 공연 조회 리스트 비지니스 로직 처리 메서드
     @Transactional(readOnly = true)
-    public Page<ShowResponse> showList(String keyword, Pageable pageable) {
-        return showRepository.showSearch(keyword, pageable);
+    public Page<ShowResponse> showList(Long userId, ShowSearchRequest request, Pageable pageable) {
+        Page<ShowResponse> result = showRepository.showSearch(request, pageable);
+
+        if (request.showTitle() != null && !request.showTitle().isBlank()) {
+            showSearchRedisService.searchLogSave(
+                    userId,
+                    request.showTitle()
+            );
+        }
+
+        return result;
     }
 
     // 공연 상세 조회 비지니스 로직 처리 메서드
@@ -72,5 +96,11 @@ public class ShowService {
         long likeCnt = likeRepository.countByShow(show);
 
         return ShowResponse.from(show, likeCnt);
+    }
+
+    // 인기 검색어 순위 비지니스 로직 처리 메서드
+    @Transactional(readOnly = true)
+    public List<SearchRankResponse> searchRankList(int limit) {
+        return showSearchRedisService.searchRankList(limit);
     }
 }
