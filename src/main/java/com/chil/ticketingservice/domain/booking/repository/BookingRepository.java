@@ -1,14 +1,14 @@
 package com.chil.ticketingservice.domain.booking.repository;
 
 import com.chil.ticketingservice.domain.booking.entity.Booking;
+import java.time.LocalDateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.repository.query.Param;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
@@ -19,21 +19,12 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     Page<Booking> findAllByUser_Id(Long userId, Pageable pageable);
 
     // 예매 후 10분 이내에 결제 되지 않은 예매 조회
-    @Modifying
-    @Transactional
-    @Query(value = """
-        UPDATE bookings b
-            JOIN seats s
-            ON b.show_id = s.show_id
-                AND s.seat_type = REGEXP_SUBSTR(b.seat, '^[A-Z]+')
-                AND s.seat_number = CAST(REGEXP_SUBSTR(b.seat, '[0-9]+$') AS UNSIGNED)
-        SET
-            b.is_canceled = 1,
-            s.seat_status = 1
-        WHERE
-            b.payment_status = 0
-          AND b.is_canceled = 0
-          AND b.created_at <= NOW() - INTERVAL 10 MINUTE
-        """, nativeQuery = true)
-    int cancelExpiredBookings();
+    @Query("""
+        SELECT b
+        FROM Booking b
+        WHERE b.paymentStatus = false
+          AND b.isCanceled = false
+          AND b.createdAt <= :expiredAt
+        """)
+    Page<Booking> findExpiredBookings(@Param("expiredAt") LocalDateTime expiredAt, Pageable pageable);
 }
