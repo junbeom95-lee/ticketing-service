@@ -13,8 +13,8 @@ public class ShowSearchLogScheduler {
 
     private final SearchLogService searchLogService;
 
-    // 매일 오전 3시 실행
-    @Scheduled(cron = "0 0 3 * * *")
+    // 매달 1일 자정 삭제
+    @Scheduled(cron = "0 0 0 1  * *")
     public void SearchLogScheduled() {
         int deleteRow = searchLogService.deleteSearchLog();
 
