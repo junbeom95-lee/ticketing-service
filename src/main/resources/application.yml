@@ -19,7 +19,7 @@ spring:
     show-sql: true
   data:
     redis:
-      host: ${REDIS_HOST}
+      host: ${REDIS_PORT}
       port: 6379
 
 jwt:
