@@ -4,6 +4,7 @@ import com.chil.ticketingservice.domain.seat.dto.response.SeatAvailableResponse;
 import com.chil.ticketingservice.domain.seat.dto.response.SeatAvailableTypeResponse;
 import com.chil.ticketingservice.domain.seat.entity.Seat;
 import com.chil.ticketingservice.domain.seat.enums.SeatTypeEnum;
+import com.chil.ticketingservice.domain.seat.repository.SeatBatchRepository;
 import com.chil.ticketingservice.domain.seat.repository.SeatRepository;
 import com.chil.ticketingservice.domain.show.entity.Show;
 import com.chil.ticketingservice.domain.show.repository.ShowRepository;
@@ -20,19 +21,17 @@ public class SeatService {
 
     private final SeatRepository seatRepository;
     private final ShowRepository showRepository;
+    private final SeatBatchRepository seatBatchRepository;
 
     //좌석 생성
     @Transactional
     public void createSeat(Show show) {
 
-        List<Seat> seatList = new ArrayList<>();
+        createSeatList(show, SeatTypeEnum.VIP);
+        createSeatList(show, SeatTypeEnum.S);
+        createSeatList(show, SeatTypeEnum.A);
+        createSeatList(show, SeatTypeEnum.B);
 
-        seatList.addAll(createSeatList(show, SeatTypeEnum.VIP));
-        seatList.addAll(createSeatList(show, SeatTypeEnum.S));
-        seatList.addAll(createSeatList(show, SeatTypeEnum.A));
-        seatList.addAll(createSeatList(show, SeatTypeEnum.B));
-
-        seatRepository.saveAll(seatList);
     }
 
     //예매 가능한 좌석 목록 조회
@@ -54,7 +53,7 @@ public class SeatService {
     }
 
     //특정 show 좌석 리스트 생성
-    private List<Seat> createSeatList(Show show, SeatTypeEnum seatType) {
+    private void createSeatList(Show show, SeatTypeEnum seatType) {
 
         List<Seat> seatList = new ArrayList<>();
 
@@ -63,6 +62,8 @@ public class SeatService {
             seatList.add(seat);
         }
 
-        return seatList;
+        seatBatchRepository.batchInsert(seatList);
+
+        seatList.clear();
     }
 }
