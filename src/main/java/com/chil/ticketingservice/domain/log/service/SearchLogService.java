@@ -33,7 +33,7 @@ public class SearchLogService {
 
     @Transactional
     public int deleteSearchLog(){
-        LocalDateTime monthDatetime = LocalDateTime.now().minusMonths(0);
+        LocalDateTime monthDatetime = LocalDateTime.now().minusMonths(1);
 
         int deleteRow = searchLogRepository.deleteBySearchTime(monthDatetime);
 
