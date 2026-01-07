@@ -35,7 +35,9 @@ jobs:
         env:
           SPRING_PROFILES_ACTIVE: test
         with:
-          arguments: clean test jacocoTestCoverageVerification
+          arguments: >
+            clean test jacocoTestCoverageVerification
+            --stacktrace --info
 
       - name: Build bootJar
         uses: gradle/gradle-build-action@v2
