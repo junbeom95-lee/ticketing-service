@@ -3,8 +3,6 @@ package com.chil.ticketingservice.domain.show.controller;
 import com.chil.ticketingservice.common.dto.CommonResponse;
 import com.chil.ticketingservice.common.enums.SuccessMessage;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
-import com.chil.ticketingservice.domain.show.dto.request.ShowSearchRequest;
-import com.chil.ticketingservice.domain.show.dto.response.SearchRankResponse;
 import com.chil.ticketingservice.domain.show.dto.response.ShowCreateResponse;
 import com.chil.ticketingservice.domain.show.dto.response.ShowResponse;
 import com.chil.ticketingservice.domain.show.service.ShowService;
@@ -15,11 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/shows")
@@ -31,10 +26,7 @@ public class ShowController {
     // 공연 생성 요청/검증 메서드
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CommonResponse<ShowCreateResponse>> createShow(
-            @Valid
-            @RequestPart("request")
-            ShowCreateRequest request,
-
+            @RequestPart("request") @Valid ShowCreateRequest request,
             @RequestPart("image") MultipartFile image
     ) {
         ShowCreateResponse result = showService.createShow(request, image);
@@ -66,14 +58,10 @@ public class ShowController {
     // 인기순: popular
     @GetMapping
     public ResponseEntity<CommonResponse<Page<ShowResponse>>> showList(
-            @AuthenticationPrincipal Long userId,
-
-            @Valid
-            @ModelAttribute ShowSearchRequest request,
-
+            @RequestParam(defaultValue = "latest") String keyword,
             Pageable pageable
     ) {
-        Page<ShowResponse> result = showService.showList(userId, request, pageable);
+        Page<ShowResponse> result = showService.showList(keyword, pageable);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -100,19 +88,5 @@ public class ShowController {
                                 result
                         )
                 );
-    }
-
-    @GetMapping("/search/popular")
-    public ResponseEntity<CommonResponse<List<SearchRankResponse>>> searchPopular(
-            @RequestParam(defaultValue = "10") int limit
-    ) {
-        List<SearchRankResponse> result = showService.searchRankList(limit);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(CommonResponse.success(
-                        SuccessMessage.SHOW_RESPONSE_SUCCESS,
-                        result
-                ));
     }
 }
