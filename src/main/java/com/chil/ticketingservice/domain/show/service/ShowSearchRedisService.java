@@ -1,5 +1,8 @@
 package com.chil.ticketingservice.domain.show.service;
 
+import com.chil.ticketingservice.domain.log.entity.SearchLog;
+import com.chil.ticketingservice.domain.log.repository.SearchLogRepository;
+import com.chil.ticketingservice.domain.log.service.SearchLogService;
 import com.chil.ticketingservice.domain.show.dto.request.ShowSearchLogRequest;
 import com.chil.ticketingservice.domain.show.dto.response.SearchRankResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,39 +20,34 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ShowSearchLogRedisService {
+public class ShowSearchRedisService {
 
     private final StringRedisTemplate stringRedisTemplate;
-    private final ObjectMapper objectMapper;
+    private final SearchLogService searchLogService;
+
+    private final static String SEARCH_RANK = "search:rank:";
 
     public void searchLogSave(Long userId, String title) {
         try {
             LocalDate today = LocalDate.now();
 
-            // 제목 검색 로그 저장
-            String logKey = "search:log:" + today;
-
-            ShowSearchLogRequest logData = new ShowSearchLogRequest(
-                    userId,
-                    title,
-                    LocalDateTime.now()
-            );
-
-            // Object → JSON
-            String json = objectMapper.writeValueAsString(logData);
-
-            stringRedisTemplate.opsForList().rightPush(logKey, json);
-
             // 제목 검색 집계 저장
-            String rankKey = "search:rank:" + today;
-            stringRedisTemplate.opsForZSet().incrementScore(rankKey, title, 1);
+            String rankKey = SEARCH_RANK + today;
+
+           boolean searchLog = searchLogService.saveSearchLog(userId, title, LocalDateTime.now());
+
+            if (searchLog == true) {
+                stringRedisTemplate.opsForZSet().incrementScore(rankKey, title, 1);
+            } else {
+                log.info("저장돼 있는 userId 와 ShowTitle 입니다: {}, {}", userId, title);
+            }
         } catch (Exception e) {
             log.warn("Redis 검색 로그 저장 실패", e);
         }
     }
 
     public List<SearchRankResponse> searchRankList(int limit) {
-        String rankKey = "search:rank:" + LocalDate.now();
+        String rankKey = SEARCH_RANK + LocalDate.now();
 
         Set<ZSetOperations.TypedTuple<String>> result = stringRedisTemplate.opsForZSet()
                 .reverseRangeWithScores(rankKey, 0, limit - 1);
