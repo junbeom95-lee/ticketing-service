@@ -124,7 +124,7 @@ class BookingServiceTest {
     void createBooking_userNotFound() {
         // Given
         BookingCreateRequest request = new BookingCreateRequest(show.getId(), "A1", 10000);
-        Long invalidUserId = 999L;
+        Long invalidUserId = 999999L;
 
         // When & Then
         assertThatThrownBy(() -> bookingService.createBooking(invalidUserId, request))
@@ -193,7 +193,7 @@ class BookingServiceTest {
     @DisplayName("예매 취소 성공")
     void cancelBooking_success() {
         // Given
-        Booking booking = Booking.createBooking(user, show, "A1", 10000);
+        Booking booking = Booking.createBooking(user, show.getId(), "A1", 10000);
         bookingRepository.save(booking);
         seat.bookSeat();
 
@@ -216,7 +216,7 @@ class BookingServiceTest {
     @DisplayName("예매 취소 실패 - 예매를 찾을 수 없음")
     void cancelBooking_bookingNotFound() {
         // Given
-        Long invalidBookingId = 999L;
+        Long invalidBookingId = 999999L;
 
         // When & Then
         assertThatThrownBy(() -> bookingService.cancelBooking(user.getId(), invalidBookingId))
@@ -231,7 +231,7 @@ class BookingServiceTest {
         Seat pastSeat = new Seat(pastShow, SeatTypeEnum.A, 1);
         seatRepository.save(pastSeat);
 
-        Booking booking = Booking.createBooking(user, pastShow, "A1", 10000);
+        Booking booking = Booking.createBooking(user, pastShow.getId(), "A1", 10000);
         bookingRepository.save(booking);
 
         // When & Then
@@ -244,7 +244,7 @@ class BookingServiceTest {
     @DisplayName("예매 취소 실패 - 본인의 예매가 아님")
     void cancelBooking_accessDenied() {
         // Given
-        Booking booking = Booking.createBooking(user, show, "A1", 10000);
+        Booking booking = Booking.createBooking(user, show.getId(), "A1", 10000);
         bookingRepository.save(booking);
 
         // When & Then
@@ -257,7 +257,7 @@ class BookingServiceTest {
     @DisplayName("예매 취소 실패 - 이미 취소된 예매")
     void cancelBooking_alreadyCanceled() {
         // Given
-        Booking booking = Booking.createBooking(user, show, "A1", 10000);
+        Booking booking = Booking.createBooking(user, show.getId(), "A1", 10000);
         booking.cancelBooking();
         bookingRepository.save(booking);
 
@@ -271,7 +271,7 @@ class BookingServiceTest {
     @DisplayName("예매 상세 조회 성공")
     void getBookingDetail_success() {
         // Given
-        Booking booking = Booking.createBooking(user, show, "A1", 10000);
+        Booking booking = Booking.createBooking(user, show.getId(), "A1", 10000);
         bookingRepository.save(booking);
 
         // When
@@ -288,7 +288,7 @@ class BookingServiceTest {
     @DisplayName("예매 상세 조회 실패 - 예매를 찾을 수 없음")
     void getBookingDetail_bookingNotFound() {
         // Given
-        Long invalidBookingId = 999L;
+        Long invalidBookingId = 999999L;
 
         // When & Then
         assertThatThrownBy(() -> bookingService.getBookingDetail(user.getId(), invalidBookingId))
@@ -300,7 +300,7 @@ class BookingServiceTest {
     @DisplayName("예매 상세 조회 실패 - 본인의 예매가 아님")
     void getBookingDetail_accessDenied() {
         // Given
-        Booking booking = Booking.createBooking(user, show, "A1", 10000);
+        Booking booking = Booking.createBooking(user, show.getId(), "A1", 10000);
         bookingRepository.save(booking);
 
         // When & Then
@@ -313,7 +313,7 @@ class BookingServiceTest {
     @DisplayName("결제 처리 성공")
     void processPayment_success() {
         // Given
-        Booking booking = Booking.createBooking(user, show, "A1", 10000);
+        Booking booking = Booking.createBooking(user, show.getId(), "A1", 10000);
         bookingRepository.save(booking);
 
         // When
@@ -331,7 +331,7 @@ class BookingServiceTest {
     @DisplayName("결제 처리 실패 - 예매를 찾을 수 없음")
     void processPayment_bookingNotFound() {
         // Given
-        Long invalidBookingId = 999L;
+        Long invalidBookingId = 999999L;
 
         // When & Then
         assertThatThrownBy(() -> bookingService.processPayment(user.getId(), invalidBookingId))
@@ -343,7 +343,7 @@ class BookingServiceTest {
     @DisplayName("결제 처리 실패 - 본인의 예매가 아님")
     void processPayment_accessDenied() {
         // Given
-        Booking booking = Booking.createBooking(user, show, "A1", 10000);
+        Booking booking = Booking.createBooking(user, show.getId(), "A1", 10000);
         bookingRepository.save(booking);
 
         // When & Then
@@ -356,7 +356,7 @@ class BookingServiceTest {
     @DisplayName("결제 처리 실패 - 이미 결제됨")
     void processPayment_alreadyPaid() {
         // Given
-        Booking booking = Booking.createBooking(user, show, "A1", 10000);
+        Booking booking = Booking.createBooking(user, show.getId(), "A1", 10000);
         booking.processPayment();
         bookingRepository.save(booking);
 
@@ -370,7 +370,7 @@ class BookingServiceTest {
     @DisplayName("결제 처리 실패 - 취소된 예매")
     void processPayment_canceledBooking() {
         // Given
-        Booking booking = Booking.createBooking(user, show, "A1", 10000);
+        Booking booking = Booking.createBooking(user, show.getId(), "A1", 10000);
         booking.cancelBooking();
         bookingRepository.save(booking);
 
@@ -384,8 +384,8 @@ class BookingServiceTest {
     @DisplayName("사용자 예매 목록 조회 성공")
     void getUserBookings_success() {
         // Given
-        Booking booking1 = Booking.createBooking(user, show, "A1", 10000);
-        Booking booking2 = Booking.createBooking(user, show, "A2", 10000);
+        Booking booking1 = Booking.createBooking(user, show.getId(), "A1", 10000);
+        Booking booking2 = Booking.createBooking(user, show.getId(), "A2", 10000);
         bookingRepository.save(booking1);
         bookingRepository.save(booking2);
 

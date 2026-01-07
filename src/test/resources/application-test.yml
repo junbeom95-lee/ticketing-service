@@ -3,6 +3,10 @@ spring:
     name: name=ticketing-service
   config:
     import: optional:file:.env[.properties]
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${TEST_DB_URL}
@@ -17,3 +21,19 @@ spring:
         jdbc:
           batch_size: 1000
     show-sql: true
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: chill-image
+    stack:
+      auto: false
