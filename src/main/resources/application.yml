@@ -17,10 +17,20 @@ spring:
         jdbc:
           batch_size: 1000
     show-sql: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
 
 cloud:
   aws:
