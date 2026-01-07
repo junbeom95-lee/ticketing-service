@@ -3,12 +3,17 @@ package com.chil.ticketingservice.domain.booking.scheduler;
 import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
 import com.chil.ticketingservice.domain.booking.service.BookingCancellationBatchService;
+import com.chil.ticketingservice.domain.seat.entity.Seat;
+import com.chil.ticketingservice.domain.seat.repository.SeatRepository;
+import com.chil.ticketingservice.domain.show.entity.Show;
+import com.chil.ticketingservice.domain.show.repository.ShowRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
@@ -18,6 +23,7 @@ public class BookingCancellationScheduler {
     private final BookingRepository bookingRepository;
     private final BookingCancellationBatchService bookingCancellationBatchService;
 
+    @Transactional
     @Scheduled(fixedDelay = 60000)
     public void cancelBooking() {
 
