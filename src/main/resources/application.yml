@@ -17,6 +17,10 @@ spring:
         jdbc:
           batch_size: 1000
     show-sql: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
 
 jwt:
   secret:
