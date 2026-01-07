@@ -54,7 +54,7 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
         builder.and(show.showDate.goe(startOfYear));
 
         // 기본 정렬 (null 방지)
-        OrderSpecifier<?> order = show.showDate.desc();
+        OrderSpecifier<?> order = show.showDate.asc();
         boolean bookingJoin = false;
 
         switch (keywordType) {
@@ -79,7 +79,7 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
             }
 
             case LATEST -> { // 최신순
-                order = show.showDate.desc();
+                order = show.showDate.asc();
             }
         }
 
@@ -97,18 +97,13 @@ public class ShowCustomRepositoryImpl implements ShowCustomRepository {
                 .leftJoin(like).on(like.show.id.eq(show.id));
 
         if (bookingJoin) {
-            query.leftJoin(booking).on(booking.showId.eq(show.id));
+            query.leftJoin(booking)
+                    .on(booking.showId.eq(show.id).and(booking.isCanceled.ne(true)));
         }
 
         List<ShowResponse> content = query
                 .where(builder)
-                .groupBy(
-                        show.id,
-                        show.title,
-                        show.location,
-                        show.showDate,
-                        show.imageUrl
-                )
+                .groupBy(show.id)
                 .orderBy(order)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
