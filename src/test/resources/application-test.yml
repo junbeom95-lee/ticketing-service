@@ -17,3 +17,8 @@ spring:
         jdbc:
           batch_size: 1000
     show-sql: true
+
+# 테스트 키
+jwt:
+  secret:
+    key: test-jwt-secret-key-test-jwt-secret-key-test
