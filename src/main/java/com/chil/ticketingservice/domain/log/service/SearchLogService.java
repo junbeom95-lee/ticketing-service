@@ -30,4 +30,13 @@ public class SearchLogService {
 
         return true;
     }
+
+    @Transactional
+    public int deleteSearchLog(){
+        LocalDateTime monthDatetime = LocalDateTime.now().minusMonths(0);
+
+        int deleteRow = searchLogRepository.deleteBySearchTime(monthDatetime);
+
+        return deleteRow;
+    }
 }
