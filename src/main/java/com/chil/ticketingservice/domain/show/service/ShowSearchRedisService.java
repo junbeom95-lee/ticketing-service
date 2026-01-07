@@ -36,7 +36,7 @@ public class ShowSearchRedisService {
 
            boolean searchLog = searchLogService.saveSearchLog(userId, title, LocalDateTime.now());
 
-            if (searchLog == true) {
+            if (searchLog) {
                 stringRedisTemplate.opsForZSet().incrementScore(rankKey, title, 1);
             } else {
                 log.info("저장돼 있는 userId 와 ShowTitle 입니다: {}, {}", userId, title);
@@ -52,7 +52,7 @@ public class ShowSearchRedisService {
         Set<ZSetOperations.TypedTuple<String>> result = stringRedisTemplate.opsForZSet()
                 .reverseRangeWithScores(rankKey, 0, limit - 1);
 
-        if (result.isEmpty() || result == null) {
+        if (result == null || result.isEmpty()) {
             return List.of();
         }
 
