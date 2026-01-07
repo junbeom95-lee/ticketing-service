@@ -30,7 +30,7 @@ public class ShowService {
     private final SeatRepository seatRepository;
     private final PriceRepository priceRepository;
     private final LikeRepository likeRepository;
-    private final ShowSearchLogRedisService showSearchLogRedisService;
+    private final ShowSearchRedisService showSearchRedisService;
     private final BookingService bookingService;
     private final S3Service s3Service;
 
@@ -79,7 +79,7 @@ public class ShowService {
         Page<ShowResponse> result = showRepository.showSearch(request, pageable);
 
         if (request.showTitle() != null && !request.showTitle().isBlank()) {
-            showSearchLogRedisService.searchLogSave(
+            showSearchRedisService.searchLogSave(
                     userId,
                     request.showTitle()
             );
@@ -101,6 +101,6 @@ public class ShowService {
     // 인기 검색어 순위 비지니스 로직 처리 메서드
     @Transactional(readOnly = true)
     public List<SearchRankResponse> searchRankList(int limit) {
-        return showSearchLogRedisService.searchRankList(limit);
+        return showSearchRedisService.searchRankList(limit);
     }
 }
