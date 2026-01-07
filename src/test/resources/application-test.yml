@@ -3,10 +3,6 @@ spring:
     name: name=ticketing-service
   config:
     import: optional:file:.env[.properties]
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${TEST_DB_URL}
@@ -21,19 +17,25 @@ spring:
         jdbc:
           batch_size: 1000
     show-sql: true
+  data:
+    redis:
+      host: host
+      port: 0000
 
+
+# 테스트 키
 jwt:
   secret:
-    key: ${JWT_SECRET_KEY}
+    key: dGVzdGp3dHNlY3JldGtleXRlc3Rqd3RzZWNyZXRrZXl0ZXN0and0c2VjcmV0a2V5
 
 cloud:
   aws:
     credentials:
-      access-key: ${ACCESS_KEY}
-      secret-key: ${SECRET_KEY}
+      access-key: accesskey
+      secret-key: secretkey
     region:
-      static: ap-northeast-2
+      static: ap-northeast-2  # 버킷의 리전
     s3:
-      bucket: chill-image
+      bucket: chill-image   # 버킷 이름
     stack:
       auto: false

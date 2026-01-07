@@ -33,7 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Disabled("ConcurrencyTest는 별도의 환경에서 실행 필요")
+@Disabled
 class ConcurrencyTest {
 
     @Autowired
@@ -53,6 +53,9 @@ class ConcurrencyTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private S3Config s3Config;
 
     int numUsers = 3;
 
