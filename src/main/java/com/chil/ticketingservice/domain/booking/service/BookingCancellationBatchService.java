@@ -4,6 +4,8 @@ import com.chil.ticketingservice.domain.booking.entity.Booking;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
 import com.chil.ticketingservice.domain.seat.entity.Seat;
 import com.chil.ticketingservice.domain.seat.repository.SeatRepository;
+import com.chil.ticketingservice.domain.show.entity.Show;
+import com.chil.ticketingservice.domain.show.repository.ShowRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ public class BookingCancellationBatchService {
 
     private final BookingRepository bookingRepository;
     private final SeatRepository seatRepository;
+    private final ShowRepository showRepository;
 
     @Transactional
     public void processCancellation(List<Booking> bookings) {
@@ -23,7 +26,9 @@ public class BookingCancellationBatchService {
 
             booking.cancelBooking();
 
-            Seat seat = seatRepository.findSeatBySeatCode(booking.getShow(), booking.getSeat());
+            Show show = showRepository.findShowById(booking.getShowId());
+
+            Seat seat = seatRepository.findSeatBySeatCode(show, booking.getSeat());
             seat.availableSeat();
         }
 
