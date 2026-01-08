@@ -9,6 +9,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 
 @RestControllerAdvice
@@ -62,6 +63,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CommonResponse<Void>> methodArgumentNotValidException(MethodArgumentNotValidException e) {
 
         String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+
+        CommonResponse<Void> response = CommonResponse.exception(message);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    //Validated 검증 예외 처리
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<CommonResponse<Void>> handlerMethodValidationException(HandlerMethodValidationException e) {
+
+        String message = e.getAllErrors().get(0).getDefaultMessage();
 
         CommonResponse<Void> response = CommonResponse.exception(message);
 
