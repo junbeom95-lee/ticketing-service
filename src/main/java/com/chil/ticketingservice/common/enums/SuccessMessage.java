@@ -34,6 +34,8 @@ public enum SuccessMessage {
     PRICE_SHOW_SEAT_SUCCESS("공연별 좌석 금액 단건 조회 성공."),
     PRICE_SHOW_SEAT_LIST_SUCCESS("공연별 좌석 금액 목록 조회 성공."),
 
+    //검색
+    SEARCH_NO_RECORDS("검색 기록 없음")
 
     ;
 
