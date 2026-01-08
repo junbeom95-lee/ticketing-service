@@ -1,7 +1,9 @@
 package com.chil.ticketingservice.domain.show.controller;
 
 import com.chil.ticketingservice.common.dto.CommonResponse;
+import com.chil.ticketingservice.common.enums.ExceptionCode;
 import com.chil.ticketingservice.common.enums.SuccessMessage;
+import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
 import com.chil.ticketingservice.domain.show.dto.request.ShowSearchRequest;
 import com.chil.ticketingservice.domain.show.dto.response.SearchRankResponse;
@@ -106,6 +108,10 @@ public class ShowController {
     public ResponseEntity<CommonResponse<List<SearchRankResponse>>> searchPopular(
             @RequestParam(defaultValue = "10") int limit
     ) {
+        if (limit > 100) {
+            throw new CustomException(ExceptionCode.SEARCH_LIMIT_EXCEED_MAX_VALUE_100);
+        }
+
         List<SearchRankResponse> result = showService.searchRankList(limit);
 
         SuccessMessage successMessage = result.isEmpty() ? SuccessMessage.SEARCH_NO_RECORDS : SuccessMessage.SHOW_RESPONSE_SUCCESS;

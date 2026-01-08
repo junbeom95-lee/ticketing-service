@@ -42,7 +42,7 @@ public enum ExceptionCode {
     BOOKING_CANNOT_CANCEL_AFTER_SHOW(HttpStatus.BAD_REQUEST, "이미 종료된 공연의 예매는 취소할 수 없습니다."),
 
     // 검색
-    SEARCH_LIMIT_EXCEED_MAX_VALUE(HttpStatus.BAD_REQUEST, "limit가 100을 초과.")
+    SEARCH_LIMIT_EXCEED_MAX_VALUE_100(HttpStatus.BAD_REQUEST, "limit가 100을 초과.")
 
     ;
 

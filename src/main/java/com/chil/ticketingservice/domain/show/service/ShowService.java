@@ -103,10 +103,6 @@ public class ShowService {
     // 인기 검색어 순위 비지니스 로직 처리 메서드
     @Transactional(readOnly = true)
     public List<SearchRankResponse> searchRankList(int limit) {
-        if (limit > 100) {
-            throw new CustomException(ExceptionCode.SEARCH_LIMIT_EXCEED_MAX_VALUE);
-        }
-
         List<SearchRankResponse> result = showSearchRedisService.searchRankList(limit);
 
         return result;
