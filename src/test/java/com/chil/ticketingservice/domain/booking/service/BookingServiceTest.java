@@ -66,10 +66,10 @@ class BookingServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = new User("test@test.com", "testUser", LocalDate.now(), "1234", UserRole.USER);
+        user = new User("booking@test.com", "testUser", LocalDate.now(), "1234", UserRole.USER);
         userRepository.save(user);
 
-        otherUser = new User("other@test.com", "otherUser", LocalDate.now(), "1234", UserRole.USER);
+        otherUser = new User("bookingother@test.com", "otherUser", LocalDate.now(), "1234", UserRole.USER);
         userRepository.save(otherUser);
 
         ShowCreateRequest showRequest = new ShowCreateRequest(

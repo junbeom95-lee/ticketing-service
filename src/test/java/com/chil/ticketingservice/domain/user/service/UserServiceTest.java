@@ -44,7 +44,7 @@ class UserServiceTest {
     void createUser_Success() {
         // given
         UserCreateRequest request = new UserCreateRequest(
-                "test@test.com",
+                "createuser@test.com",
                 "testUser",
                 LocalDate.of(1990, 1, 1),
                 "password123"
@@ -70,7 +70,7 @@ class UserServiceTest {
     void createUser_Fail_EmailExists() {
         // given
         User existingUser = new User(
-                "test@test.com",
+                "duplicate@test.com",
                 "existingUser",
                 LocalDate.of(1990, 1, 1),
                 passwordEncoder.encode("password123"),
@@ -79,7 +79,7 @@ class UserServiceTest {
         userRepository.save(existingUser);
 
         UserCreateRequest request = new UserCreateRequest(
-                "test@test.com",
+                "duplicate@test.com",
                 "newUser",
                 LocalDate.of(1995, 5, 5),
                 "password456"
@@ -97,7 +97,7 @@ class UserServiceTest {
         // given
         String rawPassword = "password123";
         User user = new User(
-                "test@test.com",
+                "login@test.com",
                 "testUser",
                 LocalDate.of(1990, 1, 1),
                 passwordEncoder.encode(rawPassword),
@@ -106,7 +106,7 @@ class UserServiceTest {
         userRepository.save(user);
 
         UserLoginRequest request = new UserLoginRequest(
-                "test@test.com",
+                "login@test.com",
                 rawPassword
         );
 
@@ -139,7 +139,7 @@ class UserServiceTest {
         // given
         String rawPassword = "password123";
         User user = new User(
-                "test@test.com",
+                "wrongpassword@test.com",
                 "testUser",
                 LocalDate.of(1990, 1, 1),
                 passwordEncoder.encode(rawPassword),
@@ -148,7 +148,7 @@ class UserServiceTest {
         userRepository.save(user);
 
         UserLoginRequest request = new UserLoginRequest(
-                "test@test.com",
+                "wrongpassword@test.com",
                 "wrongPassword"
         );
 
@@ -163,7 +163,7 @@ class UserServiceTest {
     void getUser_Success() {
         // given
         User user = new User(
-                "test@test.com",
+                "getuser@test.com",
                 "testUser",
                 LocalDate.of(1990, 1, 1),
                 passwordEncoder.encode("password123"),
