@@ -11,6 +11,7 @@ import com.chil.ticketingservice.domain.show.dto.response.ShowCreateResponse;
 import com.chil.ticketingservice.domain.show.dto.response.ShowResponse;
 import com.chil.ticketingservice.domain.show.service.ShowService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -106,11 +108,10 @@ public class ShowController {
 
     @GetMapping("/search/popular")
     public ResponseEntity<CommonResponse<List<SearchRankResponse>>> searchPopular(
-            @RequestParam(defaultValue = "10") int limit
+            @Validated
+            @RequestParam(defaultValue = "10")
+            @Max(value = 100, message = "limit 100을 초과할 수 없습니다.") int limit
     ) {
-        if (limit > 100) {
-            throw new CustomException(ExceptionCode.SEARCH_LIMIT_EXCEED_MAX_VALUE_100);
-        }
 
         List<SearchRankResponse> result = showService.searchRankList(limit);
 
