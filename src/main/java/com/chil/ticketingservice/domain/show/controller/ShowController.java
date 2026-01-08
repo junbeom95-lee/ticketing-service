@@ -108,10 +108,12 @@ public class ShowController {
     ) {
         List<SearchRankResponse> result = showService.searchRankList(limit);
 
+        SuccessMessage successMessage = result.isEmpty() ? SuccessMessage.SEARCH_NO_RECORDS : SuccessMessage.SHOW_RESPONSE_SUCCESS;
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(CommonResponse.success(
-                        SuccessMessage.SHOW_RESPONSE_SUCCESS,
+                        successMessage,
                         result
                 ));
     }
