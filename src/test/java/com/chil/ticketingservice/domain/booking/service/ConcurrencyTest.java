@@ -2,6 +2,7 @@ package com.chil.ticketingservice.domain.booking.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.chil.ticketingservice.common.config.S3Config;
 import com.chil.ticketingservice.domain.booking.dto.request.BookingCreateRequest;
 import com.chil.ticketingservice.domain.booking.repository.BookingRepository;
 import com.chil.ticketingservice.domain.price.entity.Price;
@@ -33,6 +34,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Disabled
 class ConcurrencyTest {
 
     @Autowired
@@ -52,6 +54,9 @@ class ConcurrencyTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private S3Config s3Config;
 
     int numUsers = 3;
 

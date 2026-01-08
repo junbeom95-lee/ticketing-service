@@ -88,7 +88,7 @@ public class ShowController {
     // 공연 상세 조회 요청/검증 메서드
     @GetMapping("/{showId}")
     public ResponseEntity<CommonResponse<ShowResponse>> showDetail (
-        @PathVariable Long showId
+            @PathVariable Long showId
     ) {
         ShowResponse result = showService.showDetail(showId);
 
