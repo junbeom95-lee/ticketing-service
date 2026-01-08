@@ -54,9 +54,6 @@ class ConcurrencyTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private S3Config s3Config;
-
     int numUsers = 3;
 
     @BeforeEach
