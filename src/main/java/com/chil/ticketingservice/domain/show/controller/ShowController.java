@@ -1,9 +1,7 @@
 package com.chil.ticketingservice.domain.show.controller;
 
 import com.chil.ticketingservice.common.dto.CommonResponse;
-import com.chil.ticketingservice.common.enums.ExceptionCode;
 import com.chil.ticketingservice.common.enums.SuccessMessage;
-import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
 import com.chil.ticketingservice.domain.show.dto.request.ShowSearchRequest;
 import com.chil.ticketingservice.domain.show.dto.response.SearchRankResponse;

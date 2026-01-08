@@ -1,7 +1,5 @@
 package com.chil.ticketingservice.domain.show.service;
 
-import com.chil.ticketingservice.common.enums.ExceptionCode;
-import com.chil.ticketingservice.common.exception.CustomException;
 import com.chil.ticketingservice.domain.booking.service.BookingService;
 import com.chil.ticketingservice.domain.like.repository.LikeRepository;
 import com.chil.ticketingservice.domain.price.repository.PriceRepository;
