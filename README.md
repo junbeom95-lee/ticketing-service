@@ -40,20 +40,28 @@
 - 공연별 좌석 금액 목록 조회
 - 공연별 좌석 금액 단건 조회
 ---
-# API 명세서 분석
-## Entity 도출 및 비교 테이블 명세서
+# ERD
 
- https://teamsparta.notion.site/API-Entity-2c32dc3ef5148066a94be816b76ceeab
+## 와이어 프레임
+
+https://www.figma.com/board/4TIZPWwvOBLWN8NkqFvX5j/%EC%B9%A0%EC%B9%A0%ED%95%98%EC%A1%B0_7%EC%A1%B0?node-id=0-1&t=RWTxFMCGbn9iuI9n-1
+
+## 테이블 명세서
+
+https://www.notion.so/teamsparta/2cb2dc3ef514816a8546d268e904f755
 
 ## ERD
 
-<img width="2083" height="865" alt="스크린샷 2025-12-15 10 51 30" src="https://github.com/user-attachments/assets/91f6d27e-0009-4bc8-8436-581a8343dac6" />
+<img width="2056" height="729" alt="image" src="https://github.com/user-attachments/assets/eb48965b-4a5c-4f27-b4d1-58f6be0991d8" />
 
 ## API 명세서
- https://teamsparta.notion.site/TaskFlow-API-2c32dc3ef51481139566e0201d71fe44
+
+https://www.notion.so/teamsparta/2cb2dc3ef51481568c75c154542b6637?v=2cb2dc3ef514816fa8bb000c5bdd0511
+
 ---
 # 아키텍처 구조
- <img width="1767" height="517" alt="image" src="https://github.com/user-attachments/assets/2055c01e-a83c-404c-a13c-11cbec63239d" />
+
+<img width="795" height="538" alt="아키텍쳐(다크모드)" src="https://github.com/user-attachments/assets/a4a6c05f-bf08-4072-91c3-4a9bf64bdf39" />
 
 ---
 # 기술 스택
@@ -77,6 +85,7 @@
 ---
 # 시연 영상
 
+https://youtu.be/VFXZONS8kQU
 
 ---
 # 프로젝트 정리본
