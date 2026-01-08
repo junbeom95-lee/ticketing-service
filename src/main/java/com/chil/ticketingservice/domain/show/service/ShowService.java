@@ -101,6 +101,8 @@ public class ShowService {
     // 인기 검색어 순위 비지니스 로직 처리 메서드
     @Transactional(readOnly = true)
     public List<SearchRankResponse> searchRankList(int limit) {
-        return showSearchRedisService.searchRankList(limit);
+        List<SearchRankResponse> result = showSearchRedisService.searchRankList(limit);
+
+        return result;
     }
 }
