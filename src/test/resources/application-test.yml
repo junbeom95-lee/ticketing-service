@@ -21,7 +21,7 @@ spring:
   data:
     redis:
       host: localhost
-      port: 0000
+      port: 6379
 
 
 # 테스트 키
