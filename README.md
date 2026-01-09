@@ -61,7 +61,10 @@ https://www.notion.so/teamsparta/2cb2dc3ef51481568c75c154542b6637?v=2cb2dc3ef514
 ---
 # 아키텍처 구조
 
-<img width="795" height="538" alt="아키텍쳐(다크모드)" src="https://github.com/user-attachments/assets/a4a6c05f-bf08-4072-91c3-4a9bf64bdf39" />
+<img width="795" height="538" alt="아키텍쳐(다크모드)" src="https://github.com/user-attachments/assets/a4a6c05f-bf08-4072-91c3-4a9bf64bdf39 #gh-dark-mode-only" />
+
+<img width="795" height="555" alt="아키텍쳐" src="https://github.com/user-attachments/assets/224094c0-a735-41d5-bce4-62d3ef91e6cf #gh-light-mode-only" />
+
 
 ---
 # 기술 스택
@@ -90,4 +93,9 @@ https://youtu.be/VFXZONS8kQU
 ---
 # 프로젝트 정리본
 
-### 
+### https://www.canva.com/design/DAG9sHM7aI8/3wWEBOgKrxzAWkauwf2PEQ/edit?utm_content=DAG9sHM7aI8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
+---
+# 트러블 슈팅 및 작업 보드
+
+### https://www.notion.so/teamsparta/2cb2dc3ef514810ab502e6c69cfd0be3?v=2cb2dc3ef51481cca552000ca18e3d3d
