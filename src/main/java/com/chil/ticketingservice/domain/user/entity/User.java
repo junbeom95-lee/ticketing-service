@@ -1,6 +1,7 @@
 package com.chil.ticketingservice.domain.user.entity;
 
 import com.chil.ticketingservice.common.entity.BaseEntity;
+import com.chil.ticketingservice.domain.user.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -31,10 +32,11 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(length = 50, nullable = false)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
 
-    public User(String email, String username, LocalDate birth, String password, String role) {
+    public User(String email, String username, LocalDate birth, String password, UserRole role) {
         this.email = email;
         this.username = username;
         this.birth = birth;

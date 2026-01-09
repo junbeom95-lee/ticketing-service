@@ -1,6 +1,7 @@
 package com.chil.ticketingservice.domain.price.entity;
 
 import com.chil.ticketingservice.domain.show.entity.Show;
+import com.chil.ticketingservice.domain.seat.enums.SeatTypeEnum;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,13 +18,20 @@ public class Price {
     @Column(name = "price_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="show_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "show_id", nullable = false)
     private Show show;
 
-    @Column(nullable = false)
-    private String seatType;
+    @Column(length = 20, nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private SeatTypeEnum seatType;
 
     @Column(nullable = false)
-    private int seatPrice;
+    private Integer price;
+
+    public Price(Show show, SeatTypeEnum seatType, Integer price) {
+        this.show = show;
+        this.seatType = seatType;
+        this.price = price;
+    }
 }

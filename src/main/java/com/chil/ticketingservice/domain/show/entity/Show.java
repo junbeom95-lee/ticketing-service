@@ -1,5 +1,7 @@
 package com.chil.ticketingservice.domain.show.entity;
 
+import com.chil.ticketingservice.common.entity.BaseEntity;
+import com.chil.ticketingservice.domain.show.dto.request.ShowCreateRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Table(name = "shows")
 @NoArgsConstructor(access =AccessLevel.PROTECTED)
-public class Show {
+public class Show extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,33 +35,15 @@ public class Show {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private Long creator;
-
     @Column
     private String imageUrl;
 
-    @Column(nullable = false)
-    private LocalDateTime createAt;
-
-    public Show(
-            String title,
-            String location,
-            LocalDateTime showDate,
-            Long ageRating,
-            String description,
-            Long creator
-    ) {
-        this.title = title;
-        this.location = location;
-        this.showDate = showDate;
-        this.ageRating = ageRating;
-        this.description = description;
-        this.creator = creator;
-    }
-
-    // 공연 삭제
-    public void showDelete(Long id) {
-        this.id = id;
+    public Show(ShowCreateRequest request) {
+        this.title = request.title();
+        this.location = request.location();
+        this.showDate = request.showDate();
+        this.ageRating = request.ageRating();
+        this.description = request.description();
+        this.imageUrl = request.imageUrl();
     }
 }

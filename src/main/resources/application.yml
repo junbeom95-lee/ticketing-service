@@ -14,4 +14,32 @@ spring:
     properties:
       hibernate:
         format_sql: false
+        jdbc:
+          batch_size: 1000
     show-sql: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
+    region:
+      static: ap-northeast-2  # 버킷의 리전
+    s3:
+      bucket: chill-image   # 버킷 이름
+    stack:
+      auto: false
