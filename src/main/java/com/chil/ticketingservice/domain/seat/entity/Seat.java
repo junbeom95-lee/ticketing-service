@@ -10,16 +10,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "seats",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "uk_seat_show_id_seat_type_seat_number",
-                        columnNames = {"show_id", "seat_type", "seat_number"}
-                )
-        },
         indexes = {
                 @Index(
                         name = "idx_seat_show_status_type",
                         columnList = "show_id, seat_status, seat_type"
+                ),
+                @Index(
+                        name = "idx_seat_show_id_seat_type_seat_number",
+                        columnList = "show_id, seat_type, seat_number"
                 )
         }
 )
