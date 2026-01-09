@@ -52,7 +52,8 @@ https://www.notion.so/teamsparta/2cb2dc3ef514816a8546d268e904f755
 
 ## ERD
 
-<img width="2056" height="729" alt="image" src="https://github.com/user-attachments/assets/eb48965b-4a5c-4f27-b4d1-58f6be0991d8" />
+<img width="2049" height="727" alt="image" src="https://github.com/user-attachments/assets/2f6a250c-eff1-4be2-9e13-a3e127bffe74" />
+
 
 ## API 명세서
 
